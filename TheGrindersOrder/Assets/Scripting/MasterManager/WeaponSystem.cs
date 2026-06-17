@@ -13,6 +13,11 @@ public class WeaponSystem : MonoBehaviour
     [Header("Current State")]
     public WeaponType currentWeapon = WeaponType.Pistol;
 
+    //Updated Bullet
+    [Header("Bullet Setup")]
+    public GameObject bulletPrefab;
+    public Transform firePoint;
+
     float currentDamage;
     int currentAmmo;
     int maxAmmo;
@@ -72,6 +77,7 @@ public class WeaponSystem : MonoBehaviour
         isReloading = false;
     }
 
+
     public void TryShoot(Vector2 direction)
     {
         if (isReloading) return;
@@ -96,17 +102,38 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
+    //void Fire(Vector2 direction)
+    //{
+    //    RaycastHit2D hit = Physics2D.Raycast(transform.position, direction.normalized, 100.0f);
+    //    if (hit.collider != null)
+    //    {
+    //        // RE-ENABLE ONCE ENEMY SCRIPT IS DONE
+    //        var health = hit.collider.GetComponent<EnemyHealthTest>();
+    //        if (health != null)
+    //        {
+    //            health.TakeDamage(currentDamage);
+    //        }
+    //    }
+    //}
+
+
+    //Updated Fire
     void Fire(Vector2 direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction.normalized, 100.0f);
-        if (hit.collider != null)
+        // Create bullet from the fire point
+        GameObject bulletObject = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            firePoint.rotation
+        );
+
+        // Get the bullet script
+        Bullet bullet = bulletObject.GetComponent<Bullet>();
+
+        // Give bullet the current weapon damage
+        if (bullet != null)
         {
-            // RE-ENABLE ONCE ENEMY SCRIPT IS DONE
-            var health = hit.collider.GetComponent<EnemyHealthTest>();
-            if (health != null)
-            {
-                health.TakeDamage(currentDamage);
-            }
+            bullet.damage = currentDamage;
         }
     }
 
