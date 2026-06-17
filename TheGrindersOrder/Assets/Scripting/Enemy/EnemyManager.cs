@@ -33,7 +33,6 @@ public class EnemyManager : MonoBehaviour
 
             EnemyData data = new EnemyData
             {
-              
                 enemyID = row[0].Trim(),
                 displayName = row[1].Trim(),
                 role = row[2].Trim(),
@@ -47,8 +46,6 @@ public class EnemyManager : MonoBehaviour
                 meatDropAmt = row[11].Trim(),
                 coinDropAmt = row[12].Trim(),
                 weaponId = row[13].Trim(),
-                spawnCount = int.Parse(row[14]),
-                isBomber = bool.Parse(row[15])
             };
 
             enemyDatabase[data.enemyID] = data;
