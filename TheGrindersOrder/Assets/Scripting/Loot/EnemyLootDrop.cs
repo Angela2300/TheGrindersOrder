@@ -1,56 +1,80 @@
+using System.Collections.Generic;
 using UnityEngine;
+
+//     Enemy teammate adds ONE line to their death function:
+//     GetComponent<EnemyLootDrop>()?.SpawnLoot(transform.position);
+//
+// DOES NOT DEPEND ON: CSVLoader, LootRow, PlayerInventory, PlayerStats
+
 
 public class EnemyLootDrop : MonoBehaviour
 {
+    [Header("Enemy Identity")]
+    [Tooltip("Must match the enemyType string in LootDropDataProvider tables. " +
+             "Values: farmer, townsperson, bomber, knight, marlow_boss")]
+    public string enemyType = "farmer";
+
+    [Header("Data Source")]
+    [Tooltip("Drag LootDropDataProvider from the scene into this field")]
+    public LootDropDataProvider dataProvider;
+
     [Header("Loot Prefabs")]
+    [Tooltip("Drag Loot_Coin prefab here")]
     public GameObject coinPrefab;
+    [Tooltip("Drag Loot_Meat prefab here")]
     public GameObject meatPrefab;
+    [Tooltip("Drag Loot_Medkit prefab here")]
     public GameObject medkitPrefab;
+    [Tooltip("Drag Loot_BossItem prefab here")]
     public GameObject bossItemPrefab;
 
-    [Header("Drop Settings")]
-    public int meatAmount = 1;
-    public int coinAmount = 1;
+    [Header("Scatter")]
+    [Tooltip("How far apart dropped items scatter from the death position")]
+    public float scatterRadius = 0.5f;
 
-    [Range(0f, 1f)]
-    public float coinDropChance = 0.3f;
-
-    [Range(0f, 1f)]
-    public float medkitDropChance = 0.05f;
-
-    public bool isBoss = false;
-
-    public void SpawnLoot(Vector3 position)
+    //Called by enemy teammate's death function 
+    public void SpawnLoot(Vector3 deathPosition)
     {
-        Spawn(meatPrefab, "loot_meat", meatAmount, position);
-
-        if (Random.value <= coinDropChance)
+        if (dataProvider == null)
         {
-            Spawn(coinPrefab, "loot_coin", coinAmount, position);
+            Debug.LogError("[EnemyLootDrop] Data Provider is not assigned. Drag LootDropDataProvider into the Inspector.");
+            return;
         }
 
-        if (Random.value <= medkitDropChance)
-        {
-            Spawn(medkitPrefab, "loot_medkit", 1, position);
-        }
+        List<LootDropEntry> drops = dataProvider.GetDropsForEnemy(enemyType);
 
-        if (isBoss)
+        foreach (LootDropEntry entry in drops)
         {
-            Spawn(bossItemPrefab, "quest_boss_item", 1, position);
+            // Roll against drop chance
+            if (Random.value > entry.dropChance) continue;
+
+            int dropAmount = Random.Range(entry.minAmount, entry.maxAmount + 1);
+            GameObject prefab = GetPrefabForType(entry.resourceType);
+
+            if (prefab == null)
+            {
+                Debug.LogWarning($"[EnemyLootDrop] No prefab assigned for resource type: {entry.resourceType}");
+                continue;
+            }
+
+            for (int i = 0; i < dropAmount; i++)
+            {
+                Vector2 offset = Random.insideUnitCircle * scatterRadius;
+                Vector3 spawnPos = deathPosition + new Vector3(offset.x, offset.y, 0f);
+                Instantiate(prefab, spawnPos, Quaternion.identity);
+            }
         }
     }
 
-    private void Spawn(GameObject prefab, string resourceType, int amount, Vector3 position)
+    GameObject GetPrefabForType(string type)
     {
-        if (prefab == null) return;
-
-        GameObject loot = Instantiate(prefab, position, Quaternion.identity);
-
-        LootItem lootItem = loot.GetComponent<LootItem>();
-        if (lootItem != null)
+        return type switch
         {
-            lootItem.resourceType = resourceType;
-            lootItem.amount = amount;
-        }
+            "loot_coin" => coinPrefab,
+            "loot_meat" => meatPrefab,
+            "loot_medkit" => medkitPrefab,
+            "quest_boss_item" => bossItemPrefab,
+            _ => null
+        };
     }
 }
