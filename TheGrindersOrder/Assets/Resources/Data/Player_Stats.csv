@@ -1,0 +1,6 @@
+stat_id,display_name,base_value,min_value,max_value,unit
+max_health,Max Health,5,5,10,hearts
+armor,Armor,0,0,0.25,damage_reduction
+walk_speed,Walk Speed,4.0,1.0,10.0,units_per_second
+weapon_damage,Weapon Damage,10,1,9999,flat
+pet_damage,Pet Damage,0,0,40,dps
