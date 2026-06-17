@@ -4,33 +4,74 @@ public class EnemyController : MonoBehaviour
 
 {
     public string enemyID;
-
     private EnemyData stats;
     private Transform target;
 
-    void Start()
+    //public void InitializeWithID(string id)
+    //{
+    //    enemyID = id;
+    //    if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
+    //    {
+    //        InitializeEnemy(stats);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogError($"Enemy ID '{enemyID}' not found in database!");
+    //    }
+    //}
+
+    public void Setup(string id)
     {
+        enemyID = id;
         if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
         {
             InitializeEnemy(stats);
         }
+        else
+        {
+            Debug.LogError($"Database Error: Could not find ID '{enemyID}'");
+        }
+    }
 
-        // find target in scene (temporary player)
-        target = GameObject.Find("Hi Im a Dummy Player").transform;  //target = player.transform;(copy paste on this line after put real player)
+    void Start()
+    {
+       
+        if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
+        {
+            InitializeEnemy(stats);
+        }
+        else
+        {
+            Debug.LogError($"Enemy ID '{enemyID}' not found in database!");
+        }
+
+        GameObject playerObj = GameObject.Find("Hi Im a Dummy Player");
+
+        if (playerObj != null)
+        {
+            target = playerObj.transform;
+        }
+        else
+        {
+            Debug.LogError("Player object not found in scene!");
+        }
     }
 
     void Update()
     {
-        if (target == null) return;
+        //if (target == null) return;
+        if (stats == null || target == null) return;
+    
 
-        //  simple movement toward target
-        float speed = float.Parse(stats.moveSpeedValue); // from your CSV
+        if (float.TryParse(stats.moveSpeedValue, out float speed))
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                target.position,
+                speed * Time.deltaTime
+            );
+        }
 
-        transform.position = Vector3.MoveTowards(
-            transform.position,
-            target.position,
-            speed * Time.deltaTime
-        );
     }
 
     void InitializeEnemy(EnemyData data)

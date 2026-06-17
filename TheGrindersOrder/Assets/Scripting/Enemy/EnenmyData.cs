@@ -21,5 +21,5 @@ public class EnemyData
     public string coinDropAmt;
     public string weaponId;
     public string meatDropAmt;
-
+    public int spawnCount;
 }

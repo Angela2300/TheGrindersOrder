@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour
 
         Debug.Log("Starting Level " + levelID);
 
-        enemySpawner.SpawnLevel(level);
+        enemySpawner.StartLevel(levelID);
     }
 }
 
