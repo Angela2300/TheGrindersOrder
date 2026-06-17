@@ -1,0 +1,2 @@
+PlayerID,Hearts,Lives,ArmorLives,StartWeaponID,Coins,,,,,Notes
+player_butcher,5,10,3,weapon_pistol,0,,,,,Disable shooting inside shop/blend/counter/body modifier circles

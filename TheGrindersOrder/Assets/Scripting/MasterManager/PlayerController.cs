@@ -3,22 +3,53 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Movement")]
     public float moveSpeed = 5f;
+
+    [Header("Rotation")]
+    public float rotationSpeed = 10f;
+    public float rotationOffset = -90f;
+
     private Rigidbody2D rb;
+    private Vector2 moveInput;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
     }
 
+    void Update()
+    {
+        ReadMovementInput();
+        RotateToMouse();
+    }
+
     void FixedUpdate()
     {
-        Vector2 move =
-            (Keyboard.current.dKey.isPressed ? Vector2.right : Vector2.zero) +
-            (Keyboard.current.aKey.isPressed ? Vector2.left : Vector2.zero) +
-            (Keyboard.current.wKey.isPressed ? Vector2.up : Vector2.zero) +
-            (Keyboard.current.sKey.isPressed ? Vector2.down : Vector2.zero);
+        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+    }
 
-        rb.MovePosition(rb.position + move.normalized * moveSpeed * Time.fixedDeltaTime);
+    void ReadMovementInput()
+    {
+        moveInput = Vector2.zero;
+
+        if (Keyboard.current.wKey.isPressed) moveInput.y += 1;
+        if (Keyboard.current.sKey.isPressed) moveInput.y -= 1;
+        if (Keyboard.current.aKey.isPressed) moveInput.x -= 1;
+        if (Keyboard.current.dKey.isPressed) moveInput.x += 1;
+
+        moveInput = moveInput.normalized;
+    }
+
+    void RotateToMouse()
+    {
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        mouseWorld.z = 0;
+
+        Vector2 direction = (Vector2)mouseWorld - rb.position;
+
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg + rotationOffset;
+
+        rb.rotation = angle;
     }
 }

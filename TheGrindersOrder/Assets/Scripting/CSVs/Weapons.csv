@@ -1,0 +1,5 @@
+WeaponID,DisplayName,Category,Damage,Ammo,ReloadTimeSec,FireRateSec,SprayPattern,XOffset,YOffset,IsStartingWeapon,DropSource,Notes
+weapon_pistol,Pistol,Gun,10,6,2,0.5,Single_SprayRadius,0,0,TRUE,Starting Weapon,Basic weapon
+weapon_smg,SMG,Gun,5,50,2,0.2,Single_SprayRadius,0.1,0.2,FALSE,Level 2 medium enemy drop,Fast fire rate
+weapon_shotgun,Shotgun,Gun,15,5,2.5,0.8,NearRangeWideSpreadRadius,-0.1,0.5,FALSE,Level 3 bomber drop,Close range burst weapon
+weapon_launcher,Launcher,Explosive,30,2,3,1,FarRangeWideSpreadRadius,-0.2,0.9,FALSE,Level 4 large enemy drop,Large range damage
