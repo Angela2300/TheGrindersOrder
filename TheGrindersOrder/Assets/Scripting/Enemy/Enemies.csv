@@ -1,6 +1,6 @@
-EnemyID,DisplayName,Role,AttackType,DamageHearts,DamageLives,Health,MoveSpeedTier,MovementSpeedValue,RangeTier,FollowsPlayer,MeatDropMin,MeatDropMax,CoinDropMin,CoinDropMax,SpecialDropID
-enemy_small,Farmer,Small Melee,Melee when in range,0.5,1,50,Slow,0.5,Short,TRUE,TBC,TBC,0,0,
-enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Close range shotgun,1,2,120,Medium,1,Close,TRUE,TBC,TBC,0,0,weapon_smg
-enemy_medium_bomber,Bomber Townsperson,Medium V2,Runs toward player then explodes,1,2,120,Medium,1,Explosion,TRUE,TBC,TBC,0,0,weapon_shotgun
-enemy_large,Knight,Large Shooter,Ranged launcher attack,1.5,3,200,Slow,0.5,Large,TRUE,TBC,TBC,0,0,weapon_launcher
-boss_bartender,Marlow the Mixer,Boss,Combo attacks with biggest range,2,4,1000,Boss,1,Largest,TRUE,0,0,0,0,quest_boss_item
+EnemyID,DisplayName,Role,AttackType,DamageHearts,DamageLives,Health,MoveSpeedTier,MovementSpeedValue,RangeTier,FollowsPlayer,MeatDropAmt,CoinDropAmt,WeaponID,,
+enemy_small,Farmer,Small Melee,Melee,0.5,1,50,Slow,0.5,Short,TRUE,0,0,,,
+enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Shotgun,1,2,120,Medium,1,Close,TRUE,0,0,weapon_smg,,
+enemy_medium_bomber,Bomber Townsperson,Medium V2,Bomber,1,2,120,Medium,1,Explosion,TRUE,0,0,weapon_shotgun,,
+enemy_large,Knight,Large Shooter,Launcher,1.5,3,200,Slow,0.5,Large,TRUE,0,0,weapon_launcher,,
+boss_bartender,Marlow the Mixer,Boss,Boss,2,4,1000,Boss,1,Largest,TRUE,0,0,quest_boss_item,,

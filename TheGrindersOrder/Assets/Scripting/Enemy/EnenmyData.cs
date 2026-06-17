@@ -18,6 +18,8 @@ public class EnemyData
     public bool followsPlayer;
 
     // Loot
+    public string coinDropAmt;
     public string weaponId;
     public string meatDropAmt;
+
 }
