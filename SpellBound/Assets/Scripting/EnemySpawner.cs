@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+<<<<<<< Updated upstream:SpellBound/Assets/Scripting/EnemySpawner.cs
 [System.Serializable]
 public class LevelConfig
 {
@@ -202,3 +203,42 @@ public class EnemySpawner : MonoBehaviour
         HandleHumanHarvested(human);
     }
 }
+=======
+public class EnemySpawner : MonoBehaviour
+{
+    public GameObject enemyPrefab;
+    public Transform[] spawnPoints;
+
+    public void SpawnLevel(LevelData levelData)
+    {
+
+        StartCoroutine(SpawnOverTime("enemy_small", levelData.smallCount));
+        StartCoroutine(SpawnOverTime("enemy_medium_shotgun", levelData.mediumCount));
+        StartCoroutine(SpawnOverTime("enemy_medium_bomber", levelData.bomberCount));
+        StartCoroutine(SpawnOverTime("enemy_large", levelData.largeCount));
+        StartCoroutine(SpawnOverTime("boss_bartender", levelData.bossCount));
+    }
+
+    IEnumerator SpawnOverTime(string enemyID, int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+
+            Transform spawn = spawnPoints[Random.Range(0, spawnPoints.Length)];
+            GameObject enemy = Instantiate(enemyPrefab, spawn.position, Quaternion.identity);
+
+      
+            enemy.GetComponent<EnemyController>().enemyID = enemyID;
+
+            Debug.Log("Spawned enemy with ID: " + enemyID);
+
+
+            yield return new WaitForSeconds(Random.Range(0.5f, 1.0f));
+        }
+    }
+}
+
+
+
+
+>>>>>>> Stashed changes:TheGrindersOrder/Assets/Scripting/EnemySpawner.cs
