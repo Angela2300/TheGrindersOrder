@@ -22,4 +22,5 @@ public class EnemyData
     public string weaponId;
     public string meatDropAmt;
     public int spawnCount;
+    public bool isBomber;
 }
