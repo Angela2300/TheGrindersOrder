@@ -27,6 +27,15 @@ public class WeaponSystem : MonoBehaviour
     bool isReloading;
     float lastShotTime;
 
+
+    //WeaponSprite
+    [Header("Weapon Sprites")]
+    public SpriteRenderer playerSpriteRenderer;
+    public Sprite pistolSprite;
+    public Sprite smgSprite;
+    public Sprite shotgunSprite;
+    public Sprite launcherSprite;
+
     void Start()
     {
         ApplyWeaponStats(currentWeapon);
@@ -41,6 +50,31 @@ public class WeaponSystem : MonoBehaviour
     {
         currentWeapon = weaponType;
         ApplyWeaponStats(currentWeapon);
+        UpdateWeaponSprite();//Added sprite
+    }
+
+    void UpdateWeaponSprite()
+    {
+        if (playerSpriteRenderer == null) return;
+
+        switch (currentWeapon)
+        {
+            case WeaponType.Pistol:
+                playerSpriteRenderer.sprite = pistolSprite;
+                break;
+
+            case WeaponType.SMG:
+                playerSpriteRenderer.sprite = smgSprite;
+                break;
+
+            case WeaponType.Shotgun:
+                playerSpriteRenderer.sprite = shotgunSprite;
+                break;
+
+            case WeaponType.Launcher:
+                playerSpriteRenderer.sprite = launcherSprite;
+                break;
+        }
     }
 
     void ApplyWeaponStats(WeaponType weaponType)
