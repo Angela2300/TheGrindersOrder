@@ -137,6 +137,42 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
+
+    void FireSingle()
+    {
+        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+
+        Bullet bullet = bulletObject.GetComponent<Bullet>();
+
+        if (bullet != null)
+            bullet.damage = currentDamage;
+    }
+
+    void FireSpread(int bulletCount, float spreadAngle)
+    {
+        for (int i = 0; i < bulletCount; i++)
+        {
+            float angleOffset = Mathf.Lerp(
+                -spreadAngle,
+                spreadAngle,
+                i / (float)(bulletCount - 1)
+            );
+
+            Quaternion spreadRotation =
+                firePoint.rotation * Quaternion.Euler(0, 0, angleOffset);
+
+            GameObject bulletObject = Instantiate(
+                bulletPrefab,
+                firePoint.position,
+                spreadRotation
+            );
+
+            Bullet bullet = bulletObject.GetComponent<Bullet>();
+
+            if (bullet != null)
+                bullet.damage = currentDamage;
+        }
+    }
     void StartReload()
     {
         if (!isReloading)
