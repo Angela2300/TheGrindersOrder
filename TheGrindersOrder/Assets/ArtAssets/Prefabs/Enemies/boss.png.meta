@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 785a2bb948ce3e54d9b657cf65a79406
+guid: e141e1fc6f9c57a40ba1fcbc794d8ab1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8601958388744198210
-    second: a45176da-4b50-45d0-a986-888d1dcb3f36_0
+      213: -6030470519257238588
+    second: little-nightmares-cook-playstation-4-game-xbox-one-stage-thumbnail-removebg-preview_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: a45176da-4b50-45d0-a986-888d1dcb3f36_0
+      name: little-nightmares-cook-playstation-4-game-xbox-one-stage-thumbnail-removebg-preview_0
       rect:
         serializedVersion: 2
-        x: 122
+        x: 14
         y: 0
-        width: 1285
-        height: 1024
+        width: 286
+        height: 517
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 446, y: 0, z: 442, w: 0}
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eb7e53aab64bf9880800000000000000
-      internalID: -8601958388744198210
+      spriteID: 4c3f43773077f4ca0800000000000000
+      internalID: -6030470519257238588
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0d64a86c03ed7db49b6a1cf2a4325d54
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      a45176da-4b50-45d0-a986-888d1dcb3f36_0: -8601958388744198210
+      little-nightmares-cook-playstation-4-game-xbox-one-stage-thumbnail-removebg-preview_0: -6030470519257238588
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
