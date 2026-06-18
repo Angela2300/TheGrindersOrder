@@ -1,2 +1,16 @@
 fileFormatVersion: 2
 guid: d8dbaa2f15525fc489ddee939058fd7e
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - emptySlotSprite: {instanceID: 0}
+  - pistolSprite: {fileID: -4254059877319897387, guid: f3e7eb8463e4a1b4c9cbe5b29edbb4b2, type: 3}
+  - smgSprite: {fileID: 7144583015058605669, guid: f3e7eb8463e4a1b4c9cbe5b29edbb4b2, type: 3}
+  - shotgunSprite: {fileID: 6407226241554960098, guid: f3e7eb8463e4a1b4c9cbe5b29edbb4b2, type: 3}
+  - launcherSprite: {fileID: 6820856509940793013, guid: f3e7eb8463e4a1b4c9cbe5b29edbb4b2, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

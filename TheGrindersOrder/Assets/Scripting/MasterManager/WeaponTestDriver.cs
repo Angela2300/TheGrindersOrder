@@ -9,7 +9,7 @@ public class WeaponTestDriver : MonoBehaviour
     {
         if (weaponSystem == null) return;
 
-        HandleWeaponSwitch();
+        //HandleWeaponSwitch();
         HandleShooting();
     }
 

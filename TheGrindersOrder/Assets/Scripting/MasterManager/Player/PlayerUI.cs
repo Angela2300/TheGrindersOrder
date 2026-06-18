@@ -30,8 +30,9 @@ public class PlayerUI : MonoBehaviour
         {
             shields[i].SetActive(i < shieldCount);
         }
+       
+        Debug.Log("Updating coin text: " + coins);
 
-        // Change the coin text
         if (coinsText != null)
         {
             coinsText.text = "Coins: " + coins;

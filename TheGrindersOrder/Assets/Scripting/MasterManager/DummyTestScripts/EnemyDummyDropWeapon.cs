@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,12 @@ public class EnemyDummyDropWeapon : MonoBehaviour
 
     [Header("Weapon Drop")]
     public GameObject weaponDropPrefab;
+
+    [Header("Coin Drop")]
+    public GameObject coinDropPrefab;
+
+    [Header("Meat Drop")]
+    public GameObject meatDropPrefab;
 
     void Start()
     {
@@ -42,9 +49,30 @@ public class EnemyDummyDropWeapon : MonoBehaviour
 
     void Die()
     {
+        // Drop weapon
         if (weaponDropPrefab != null)
         {
             Instantiate(weaponDropPrefab, transform.position, Quaternion.identity);
+        }
+
+        // Drop coin slightly to the right
+        if (coinDropPrefab != null)
+        {
+            Instantiate(
+                coinDropPrefab,
+                transform.position + new Vector3(0.3f, 0f, 0f),
+                Quaternion.identity
+            );
+        }
+
+        // Drop meat slightly to the left
+        if (meatDropPrefab != null)
+        {
+            Instantiate(
+                meatDropPrefab,
+                transform.position + new Vector3(-0.3f, 0f, 0f),
+                Quaternion.identity
+            );
         }
 
         Destroy(gameObject);

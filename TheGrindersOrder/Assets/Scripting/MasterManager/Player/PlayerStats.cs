@@ -49,6 +49,17 @@ public class PlayerStats : MonoBehaviour
         RefreshUI();
     }
 
+
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+
+        Debug.Log("Coins = " + coins);
+
+        RefreshUI();
+    }
+
+
     //-------------------------------------
     // ENEMY
     //-------------------------------------
@@ -84,14 +95,6 @@ public class PlayerStats : MonoBehaviour
     // SHOP 
     //-------------------------------------
 
-    // Call this when the player picks up coins
-    public void AddCoins(int amount)
-    {
-        coins += amount;
-
-        // Update the screen
-        RefreshUI();
-    }
 
     // Call this when the player buys something
     public void SpendCoins(int amount)
@@ -126,11 +129,11 @@ public class PlayerStats : MonoBehaviour
     {
         if (playerUI != null)
         {
-            playerUI.UpdateUI(
-                hearts,
-                armorLives,
-                coins
-            );
+            playerUI.UpdateUI(hearts, armorLives, coins);
+        }
+        else
+        {
+            Debug.LogWarning("PlayerUI not assigned!");
         }
     }
 }
