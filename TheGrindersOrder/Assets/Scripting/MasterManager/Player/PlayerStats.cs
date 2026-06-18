@@ -109,7 +109,7 @@ public class PlayerStats : MonoBehaviour
         RefreshUI();
     }
 
-    // Call this when the player gains armor or shields
+    // Call this when the player gains armor 
     public void AddArmor(int amount)
     {
         armorLives += amount;
