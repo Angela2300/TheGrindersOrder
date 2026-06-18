@@ -6,19 +6,16 @@ public class WeaponPickup : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Only player can pick up weapon
         if (!other.CompareTag("Player"))
             return;
 
-        WeaponSystem weaponSystem = other.GetComponent<WeaponSystem>();
+        WeaponSystem weaponSystem = other.GetComponentInChildren<WeaponSystem>();
 
         if (weaponSystem != null)
         {
-            // Change player's weapon
             weaponSystem.SetWeapon(weaponType);
-
-            // Remove pickup from ground
             Destroy(gameObject);
         }
     }
 }
+

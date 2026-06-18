@@ -4,6 +4,8 @@ public class MasterManager : MonoBehaviour
 {
     public static MasterManager Instance { get; private set; }
 
+
+    [Header("Game Systems")]
     public PlayerController player;
     public WeaponSystem weaponSystem;
 

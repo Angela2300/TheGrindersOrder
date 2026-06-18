@@ -1,0 +1,6 @@
+SlotID,SlotName,SlotType,BoxCount,CanStack,ItemIDs,UIPosition,Notes
+inv_medkit,Medkit Slot,Consumable,1,True,loot_medkit,Inventory,Medkits unlimited stack inside 1 box
+inv_weapons,Weapon Slots,Weapon,4,False,weapon_pistol|weapon_smg|weapon_shotgun|weapon_launcher,BottomRight,Scroll to swap weapons
+inv_meat,Meat Slot,Resource,1,True,loot_meat,Inventory,Raw meat from humans
+inv_meatjuice,Meat Juice Slot,Resource,1,True,loot_meat_juice,Inventory,Processed meat drink
+inv_coins,Coin Slot,Currency,1,True,loot_coin,Inventory,Coins from selling juice
