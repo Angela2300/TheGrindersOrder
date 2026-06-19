@@ -1,139 +1,232 @@
+//using UnityEngine;
+//using UnityEngine.SceneManagement;
+
+//public class PlayerStats : MonoBehaviour
+//{
+//    // Drag PlayerStats.csv here
+//    // This file stores the player's starting values
+//    public TextAsset playerStatsCSV;
+
+//    // These are the player's current values
+//    public int hearts = 5 ;
+//    public int shields = 3;
+//    public int coins = 0;
+//    public string startWeaponID;
+
+//    // Drag the PlayerUI object here
+//    // This allows us to tell the UI to update itself
+//    public PlayerUI playerUI;
+
+//    void Start()
+//    {
+//        // When the game starts, load the player stats from the CSV file
+//        LoadPlayerStats();
+//        RefreshUI();
+//    }
+
+//    // Read the PlayerStats.csv file
+//    void LoadPlayerStats()
+//    {
+//        // Stop if no CSV was assigned
+//        if (playerStatsCSV == null)
+//        {
+//            Debug.LogWarning("PlayerStats CSV missing!");
+//            return;
+//        }
+
+//        // Split the CSV into rows
+//        string[] lines = playerStatsCSV.text.Split('\n');
+
+//        // Read row 1
+//        // Row 0 is just the column names
+//        string[] values = lines[1].Trim().Split(',');
+
+//        // Put the CSV values into our variables
+//        hearts = int.Parse(values[1]);
+//        shields = int.Parse(values[2]);
+//        startWeaponID = values[3];
+//        coins = int.Parse(values[4]);
+
+//        // Tell the UI to update itself
+//        RefreshUI();
+//    }
+
+
+//    public void AddCoins(int amount)
+//    {
+//        coins += amount;
+
+//        Debug.Log("Coins = " + coins);
+
+//        RefreshUI();
+//    }
+
+
+//    //-------------------------------------
+//    // ENEMY
+//    //-------------------------------------
+
+//    public void TakeDamage(int damage)
+//    {
+//        Debug.Log("TakeDamage called with: " + damage);
+
+//        // 1. Prioritize taking damage from Shields first
+//        if (shields > 0)
+//        {
+//            int damageToShields = Mathf.Min(damage, shields);
+//            shields -= damageToShields; // This MUST subtract
+//            damage -= damageToShields;
+//        }
+
+//        // If there is still damage left, take out Hearts
+//        if (damage > 0)
+//        {
+//            hearts -= damage;
+//            if (hearts < 0)
+//            {
+//                hearts = 0;
+//                GameOver();
+//            }
+//        }
+//        Debug.Log("DEBUG: Hearts variable is now: " + hearts);
+//        RefreshUI();
+//        Debug.Log("Shields remaining: " + shields);
+//    }
+
+
+//    void GameOver()
+//    {
+//        Debug.Log("Game Over! Player has died.");
+//        // Reloads the current level
+//        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+//        // If you have a specific game over UI, you can call it here:
+//        // gameOverPanel.SetActive(true);
+//    }
+
+//    //-------------------------------------
+//    // SHOP 
+//    //-------------------------------------
+
+
+//    // Call this when the player buys something
+//    public void SpendCoins(int amount)
+//    {
+//        coins -= amount;
+
+//        // Don't allow negative coins
+//        if (coins < 0)
+//            coins = 0;
+
+//        // Update the screen
+//        RefreshUI();
+//    }
+
+//    // Call this when the player gains armor 
+//    public void AddShields(int amount)
+//    {
+//        shields += amount;
+
+//        // Update the screen
+//        RefreshUI();
+//    }
+
+//    //-------------------------------------
+//    // EVERYONE
+//    //-------------------------------------
+
+//    // This function refreshes the UI
+//    // Think of it as telling the screen:
+//    // "Hey! Something changed! Draw the new values!"
+//    void RefreshUI()
+//    {
+//        if (playerUI != null)
+//        {
+//            playerUI.UpdateUI(hearts, shields, coins);
+//        }
+//    }
+//}
+
+
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerStats : MonoBehaviour
 {
-    // Drag PlayerStats.csv here
-    // This file stores the player's starting values
+    [Header("Data")]
     public TextAsset playerStatsCSV;
-
-    // These are the player's current values
-    public int hearts;
-    public int armorLives;
-    public int coins;
+    public int hearts = 5;
+    public int shields = 3;
+    public int coins = 0;
     public string startWeaponID;
 
-    // Drag the PlayerUI object here
-    // This allows us to tell the UI to update itself
+    [Header("UI Reference")]
     public PlayerUI playerUI;
 
     void Start()
     {
-        // When the game starts, load the player stats from the CSV file
         LoadPlayerStats();
     }
 
-    // Read the PlayerStats.csv file
     void LoadPlayerStats()
     {
-        // Stop if no CSV was assigned
         if (playerStatsCSV == null)
         {
-            Debug.LogWarning("PlayerStats CSV missing!");
+            Debug.LogWarning("PlayerStats CSV missing! Using default values.");
+            RefreshUI();
             return;
         }
 
-        // Split the CSV into rows
         string[] lines = playerStatsCSV.text.Split('\n');
-
-        // Read row 1
-        // Row 0 is just the column names
-        string[] values = lines[1].Trim().Split(',');
-
-        // Put the CSV values into our variables
-        hearts = int.Parse(values[1]);
-        armorLives = int.Parse(values[2]);
-        startWeaponID = values[3];
-        coins = int.Parse(values[4]);
-
-        // Tell the UI to update itself
+        if (lines.Length > 1)
+        {
+            string[] values = lines[1].Trim().Split(',');
+            hearts = int.Parse(values[1]);
+            shields = int.Parse(values[2]);
+            startWeaponID = values[3];
+            coins = int.Parse(values[4]);
+        }
         RefreshUI();
     }
 
-
-    public void AddCoins(int amount)
-    {
-        coins += amount;
-
-        Debug.Log("Coins = " + coins);
-
-        RefreshUI();
-    }
-
-
-    //-------------------------------------
-    // ENEMY
-    //-------------------------------------
-
-    // Call this when an enemy attacks the player
     public void TakeDamage(int damage)
     {
-        // Damage one shield first
-        if (armorLives > 0)
+        // 1. Prioritize Shields
+        if (shields > 0)
         {
-            armorLives -= damage;
-
-            // Prevent shields from going negative
-            if (armorLives < 0)
-                armorLives = 0;
+            int damageToShields = Mathf.Min(damage, shields);
+            shields -= damageToShields;
+            damage -= damageToShields;
         }
 
-        // If no shields are left, damage hearts
-        else
+        // 2. Take Hearts
+        if (damage > 0)
         {
             hearts -= damage;
-
-            // Prevent hearts from going negative
-            if (hearts < 0)
+            if (hearts <= 0)
+            {
                 hearts = 0;
+                GameOver();
+            }
         }
-
-        // Tell the UI to update itself
+     
         RefreshUI();
     }
 
-    //-------------------------------------
-    // SHOP 
-    //-------------------------------------
+    public void AddCoins(int amount) { coins += amount; RefreshUI(); }
+    public void SpendCoins(int amount) { coins = Mathf.Max(0, coins - amount); RefreshUI(); }
+    public void AddShields(int amount) { shields += amount; RefreshUI(); }
 
-
-    // Call this when the player buys something
-    public void SpendCoins(int amount)
+    void GameOver()
     {
-        coins -= amount;
-
-        // Don't allow negative coins
-        if (coins < 0)
-            coins = 0;
-
-        // Update the screen
-        RefreshUI();
+        Debug.Log("Game Over!");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    // Call this when the player gains armor 
-    public void AddArmor(int amount)
-    {
-        armorLives += amount;
-
-        // Update the screen
-        RefreshUI();
-    }
-
-    //-------------------------------------
-    // EVERYONE
-    //-------------------------------------
-
-    // This function refreshes the UI
-    // Think of it as telling the screen:
-    // "Hey! Something changed! Draw the new values!"
     void RefreshUI()
     {
         if (playerUI != null)
         {
-            playerUI.UpdateUI(hearts, armorLives, coins);
-        }
-        else
-        {
-            Debug.LogWarning("PlayerUI not assigned!");
+            playerUI.UpdateUI(hearts, shields, coins);
         }
     }
 }

@@ -26,16 +26,34 @@ public class EnemyDummyDropWeapon : MonoBehaviour
     [Header("Meat Drop")]
     public GameObject meatDropPrefab;
 
+    //void Start()
+    //{
+    //    // Start with full health
+    //    currentHealth = maxHealth;
+
+    //    // Set up the health bar values
+    //    if (healthSlider != null)
+    //    {
+    //        healthSlider.maxValue = maxHealth;
+    //        healthSlider.value = currentHealth;
+    //    }
+    //}
+
     void Start()
     {
-        // Start with full health
-        currentHealth = maxHealth;
-
-        // Set up the health bar values
-        if (healthSlider != null)
+        try
         {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
+            currentHealth = maxHealth;
+            if (healthSlider != null)
+            {
+                healthSlider.maxValue = maxHealth;
+                healthSlider.value = currentHealth;
+            }
+            Debug.Log("Dummy script initialized successfully.");
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError("CRITICAL ERROR in Dummy Start(): " + e.Message);
         }
     }
 

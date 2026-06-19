@@ -10,7 +10,8 @@ public class LevelConfig
     public bool isUnlimitedTime = false;
     public int quota = 3;
     public float spawnInterval = 2f;
-    public GameObject[] humanPrefabs;
+
+    public GameObject humanPrefab;
     public Transform[] spawnPoints;
 }
 
@@ -119,6 +120,26 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
+    public void SpawnHuman(LevelConfig config)
+    {
+        if (config == null) return;
+
+        // Check if the prefab exists
+        if (config.humanPrefab == null)
+        {
+            Debug.LogError($"SpawnHuman: Missing prefab in config: {config.levelName}");
+            return;
+        }
+
+        // Determine spawn point
+        Transform[] points = (config.spawnPoints != null && config.spawnPoints.Length > 0) ? config.spawnPoints : defaultSpawnPoints;
+        Transform spawnPoint = points[Random.Range(0, points.Length)];
+
+        // Fixed: Correct Instantiate syntax (Object, Position, Rotation)
+        GameObject human = Instantiate(config.humanPrefab, spawnPoint.position, Quaternion.identity);
+        activeHumans.Add(human);
+    }
+
     private IEnumerator SpawnRoutine(LevelConfig config)
     {
         while (levelActive)
@@ -128,13 +149,14 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void SpawnHuman(LevelConfig config)
-    {
-        Transform[] points = (config.spawnPoints != null && config.spawnPoints.Length > 0) ? config.spawnPoints : defaultSpawnPoints;
-        GameObject prefab = config.humanPrefabs[Random.Range(0, config.humanPrefabs.Length)];
-        GameObject human = Instantiate(prefab, points[Random.Range(0, points.Length)].position, Quaternion.identity);
-        activeHumans.Add(human);
-    }
+    //private void SpawnHuman(LevelConfig config)
+    //{
+    //    Transform[] points = (config.spawnPoints != null && config.spawnPoints.Length > 0) ? config.spawnPoints : defaultSpawnPoints;
+    //    GameObject prefab = config.humanPrefabs[Random.Range(0, config.humanPrefabs.Length)];
+    //    GameObject human = Instantiate(prefab, points[Random.Range(0, points.Length)].position, Quaternion.identity);
+    //    activeHumans.Add(human);
+    //}
+
 
     // --- Timer and Fail Logic ---
 
