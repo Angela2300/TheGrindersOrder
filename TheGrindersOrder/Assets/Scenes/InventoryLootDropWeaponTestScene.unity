@@ -2288,6 +2288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   enemyID: enemy_medium_bomber
+  attackCooldown: 1.5
 --- !u!1 &1021397018
 GameObject:
   m_ObjectHideFlags: 0
@@ -3308,7 +3309,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 925736216617855593, guid: c5ac71cc6bf32bf418d3b31d53b85106, type: 3}
   firePoint: {fileID: 1743962257}
   weaponsCSV: {fileID: 4900000, guid: c6222614590108a4382fb18aef9b9996, type: 3}
-  pistolPrefab: {fileID: 2888173729374527047, guid: 064c38e384ca89c468e4352ed13599b4, type: 3}
+  pistolPrefab: {fileID: 2909629809158839127, guid: 064c38e384ca89c468e4352ed13599b4, type: 3}
   smgPrefab: {fileID: 6935904254583192650, guid: 91d03b30fb2b6d1409531341a2b32e3e, type: 3}
   shotgunPrefab: {fileID: 7611914785890187625, guid: b158b65f215cbca4085da22300e9335f, type: 3}
   launcherPrefab: {fileID: 6622253613434395402, guid: 687d6bb2532297a48999ffca12e6a43f, type: 3}
@@ -6892,7 +6893,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.2, y: 11.04}
+    oldSize: {x: 4.18, y: 11}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
