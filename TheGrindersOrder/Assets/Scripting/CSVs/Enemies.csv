@@ -1,6 +1,6 @@
 enemyID,displayName,role,attackType,damageHearts,damageLives,health,moveSpeedTier,moveSpeedValue,rangeTier,followsPlayer,meatDropAmt,coinDropAmt,weaponId,,spawnCount,,isBomber
 enemy_small,Farmer,Small Melee,Melee,0.5,1,50,Slow,0.5,Short,TRUE,0,0,,,,,FALSE
-enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Shotgun,1,2,120,Medium,1,Close,TRUE,0,0,weapon_smg,,,,FALSE
+enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Shotgun,1,2,80,Medium,1,Close,TRUE,0,0,weapon_smg,,,,FALSE
 enemy_medium_bomber,Bomber Townsperson,Medium V2,Bomber,1,2,120,Medium,1,Explosion,TRUE,0,0,weapon_shotgun,,,,TRUE
 enemy_large,Knight,Large Shooter,Launcher,1.5,3,200,Slow,0.5,Large,TRUE,0,0,weapon_launcher,,,,FALSE
 boss_bartender,Marlow the Mixer,Boss,Boss,2,4,1000,Boss,1,Largest,TRUE,0,0,quest_boss_item,,,,FALSE
