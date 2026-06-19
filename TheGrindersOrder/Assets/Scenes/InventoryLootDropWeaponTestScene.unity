@@ -1754,8 +1754,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19431753b8c92d54380507c8baebea4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MasterManager
-  player: {fileID: 0}
-  weaponSystem: {fileID: 0}
+  player: {fileID: 1226242537}
+  weaponSystem: {fileID: 1413262454}
 --- !u!4 &750183485
 Transform:
   m_ObjectHideFlags: 0
@@ -3307,6 +3307,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
   currentWeapon: 0
   bulletPrefab: {fileID: 925736216617855593, guid: c5ac71cc6bf32bf418d3b31d53b85106, type: 3}
+  launcherBulletPrefab: {fileID: 925736216617855593, guid: 08bfa865300c5894e9ce86337a190c58, type: 3}
   firePoint: {fileID: 1743962257}
   weaponsCSV: {fileID: 4900000, guid: c6222614590108a4382fb18aef9b9996, type: 3}
   pistolPrefab: {fileID: 2909629809158839127, guid: 064c38e384ca89c468e4352ed13599b4, type: 3}

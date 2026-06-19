@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8914950627911979445}
   - component: {fileID: 3063398674591254987}
   m_Layer: 0
-  m_Name: PistolBullet
+  m_Name: LauncherBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,10 +177,10 @@ MonoBehaviour:
   speed: 15
   lifeTime: 2
   damage: 10
-  isExplosive: 0
+  isExplosive: 1
   explosionRadius: 2
   damageLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1
   hitEffect: {fileID: 4794043405585894037, guid: 37138c0c33167b04fa1fb90b7f5a794f, type: 3}
   hitEffectDestroyTime: 0.3
