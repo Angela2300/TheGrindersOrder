@@ -2,6 +2,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+
 public class InventoryUI : MonoBehaviour
 {
     // The ItemIcon images inside the inventory slots
@@ -25,15 +30,8 @@ public class InventoryUI : MonoBehaviour
         int meatCount
     )
     {
-        //// Loop through every inventory slot
-        //for (int i = 0; i < weaponIcons.Length; i++)
-
-
-        // UPDATED:
-        // Prevents UI from checking more slots than the inventory actually has.
-        int slotCount = Mathf.Min(weaponIcons.Length, slotUsed.Length);
-
-        for (int i = 0; i < slotCount; i++)
+        // Loop through every inventory slot
+        for (int i = 0; i < weaponIcons.Length; i++)
         {
             // Safety check in case an ItemIcon was not assigned in the Inspector
             if (weaponIcons[i] == null)
@@ -93,7 +91,6 @@ public class InventoryUI : MonoBehaviour
         }
     }
 }
-
 
 //using UnityEngine;
 //using UnityEngine.UI;

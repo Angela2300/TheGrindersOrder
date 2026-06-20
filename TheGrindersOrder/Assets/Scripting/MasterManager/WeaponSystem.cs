@@ -118,10 +118,9 @@ public class WeaponSystem : MonoBehaviour
             case WeaponType.Launcher:
                 bulletPrefab = launcherBulletPrefab;
                 break;
-
-            //default:
-            //    bulletPrefab = bulletPrefab;
-            //    break; (This duplicates the player)
+            default:
+                bulletPrefab = bulletPrefab;
+                break;
         }
 
         currentAmmo = maxAmmo;
@@ -154,8 +153,7 @@ public class WeaponSystem : MonoBehaviour
 
     void UpdatePlayerVisual()
     {
-        // UPDATED: only destroy the previous weapon visual
-        // Do not destroy all children, because FirePoint may be there.
+        // Remove old weapon model
         if (currentWeaponVisual != null)
         {
             Destroy(currentWeaponVisual);
@@ -184,13 +182,12 @@ public class WeaponSystem : MonoBehaviour
 
         if (prefabToSpawn != null)
         {
-            // UPDATED: spawn only one current weapon
-            currentWeaponVisual = Instantiate(prefabToSpawn, weaponHolder);
-
-            // UPDATED: keep it positioned correctly on the player
-            currentWeaponVisual.transform.localPosition = Vector3.zero;
-            currentWeaponVisual.transform.localRotation = Quaternion.identity;
-            currentWeaponVisual.transform.localScale = Vector3.one;
+            currentWeaponVisual = Instantiate(
+                prefabToSpawn,
+                weaponHolder.position,
+                weaponHolder.rotation,
+                weaponHolder
+            );
         }
     }
 
@@ -280,7 +277,7 @@ public class WeaponSystem : MonoBehaviour
 
         if (bullet != null)
             bullet.damage = currentDamage;
-    
+
     }
 
     void StartReload()
