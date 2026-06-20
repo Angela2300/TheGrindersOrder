@@ -15,35 +15,32 @@ public class ShopSystem : MonoBehaviour
     public List<UpgradeOption> upgradeOptions = new List<UpgradeOption>();
 
     [Header("PlayerInventory API Mode")]
-    [Tooltip("OFF = RemoveItem(\"loot_coin\", n) and GetItemCount(\"loot_coin\"). ON = SpendCoins(n) and GetCoins().")]
+    [Tooltip("OFF = RemoveItem(\"loot_coin\", amount) and GetItemCount(\"loot_coin\"). ON = SpendCoins(amount) and GetCoins().")]
     public bool useCoinSpecificAPI = false;
 
     private Dictionary<string, int> currentLevels = new Dictionary<string, int>();
     private PlayerInventory currentInventory;
-    private List<ShopUpgradeRowUI> registeredRows = new List<ShopUpgradeRowUI>();
 
-    void Start()
+    private void Awake()
     {
         LoadUpgradeOptions();
         InitialiseLevels();
-        RefreshAllRows();
     }
 
-    void LoadUpgradeOptions()
+    private void LoadUpgradeOptions()
     {
         if (!useCSV) return;
 
-        Debug.LogWarning("[ShopSystem] useCSV = true but CSV integration is not wired yet. Using Inspector data.");
+        Debug.LogWarning("[ShopSystem] useCSV = true but CSV integration not wired. Using Inspector data.");
     }
 
-    void InitialiseLevels()
+    private void InitialiseLevels()
     {
         currentLevels.Clear();
 
         foreach (UpgradeOption option in upgradeOptions)
         {
-            if (option == null) continue;
-            if (string.IsNullOrEmpty(option.category)) continue;
+            if (option == null || string.IsNullOrEmpty(option.category)) continue;
 
             currentLevels[option.category] = 0;
         }
@@ -57,14 +54,6 @@ public class ShopSystem : MonoBehaviour
     public void ClearInventory()
     {
         currentInventory = null;
-    }
-
-    public void RegisterRow(ShopUpgradeRowUI row)
-    {
-        if (row == null) return;
-
-        if (!registeredRows.Contains(row))
-            registeredRows.Add(row);
     }
 
     public int GetCurrentLevel(string category)
@@ -87,7 +76,8 @@ public class ShopSystem : MonoBehaviour
     {
         if (currentInventory == null)
         {
-            Debug.LogWarning("[ShopSystem] No PlayerInventory is set. Is the player inside the shop trigger?");
+            OnPurchaseFailed?.Invoke("No player inventory found.");
+            Debug.LogWarning("[ShopSystem] TryPurchase called but no PlayerInventory is set.");
             return;
         }
 
@@ -95,7 +85,7 @@ public class ShopSystem : MonoBehaviour
 
         if (option == null)
         {
-            Debug.LogError($"[ShopSystem] No UpgradeOption found for category: {category}");
+            Debug.LogError($"[ShopSystem] No UpgradeOption found for category: '{category}'");
             return;
         }
 
@@ -113,9 +103,7 @@ public class ShopSystem : MonoBehaviour
 
         if (playerCoins < cost)
         {
-            string reason = $"Not enough coins. Need {cost}, have {playerCoins}.";
-            OnPurchaseFailed?.Invoke(reason);
-            Debug.Log($"[ShopSystem] {reason}");
+            OnPurchaseFailed?.Invoke($"Not enough coins. Need {cost}, have {playerCoins}.");
             return;
         }
 
@@ -124,7 +112,6 @@ public class ShopSystem : MonoBehaviour
         if (!deducted)
         {
             OnPurchaseFailed?.Invoke("Not enough coins.");
-            Debug.LogWarning("[ShopSystem] Coin deduction failed.");
             return;
         }
 
@@ -134,9 +121,7 @@ public class ShopSystem : MonoBehaviour
 
         OnUpgradePurchased?.Invoke(category, nextLevel, option.effectType, effectValue);
 
-        Debug.Log($"[ShopSystem] Purchased {category} level {nextLevel}. Cost: {cost}");
-
-        RefreshRow(category);
+        Debug.Log($"[ShopSystem] Purchased {category} level {nextLevel}. Cost: {cost}. Effect: {option.effectType} = {effectValue}");
     }
 
     private int GetCoinCount()
@@ -157,26 +142,5 @@ public class ShopSystem : MonoBehaviour
             return currentInventory.SpendCoins(amount);
 
         return currentInventory.RemoveItem("loot_coin", amount);
-    }
-
-    private void RefreshRow(string category)
-    {
-        foreach (ShopUpgradeRowUI row in registeredRows)
-        {
-            if (row != null && row.upgradeCategory == category)
-            {
-                row.RefreshDisplay();
-                return;
-            }
-        }
-    }
-
-    public void RefreshAllRows()
-    {
-        foreach (ShopUpgradeRowUI row in registeredRows)
-        {
-            if (row != null)
-                row.RefreshDisplay();
-        }
     }
 }

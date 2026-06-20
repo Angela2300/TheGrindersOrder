@@ -159,6 +159,13 @@ public class PlayerStats : MonoBehaviour
     public int coins = 0;
     public string startWeaponID;
 
+    // UPGRADED STATS
+    public int maxHearts = 5;
+    public float armorReduction = 0f;
+    public float speedMultiplier = 1f;
+    public float weaponDamageMultiplier = 1f;
+ 
+
     [Header("UI Reference")]
     public PlayerUI playerUI;
 
@@ -177,20 +184,26 @@ public class PlayerStats : MonoBehaviour
         }
 
         string[] lines = playerStatsCSV.text.Split('\n');
+
         if (lines.Length > 1)
         {
             string[] values = lines[1].Trim().Split(',');
+
             hearts = int.Parse(values[1]);
+            maxHearts = hearts;
             shields = int.Parse(values[2]);
             startWeaponID = values[3];
             coins = int.Parse(values[4]);
         }
+
         RefreshUI();
     }
 
     public void TakeDamage(int damage)
     {
-        // 1. Prioritize Shields
+        damage = Mathf.RoundToInt(damage * (1f - armorReduction));
+        damage = Mathf.Max(0, damage);
+
         if (shields > 0)
         {
             int damageToShields = Mathf.Min(damage, shields);
@@ -198,23 +211,62 @@ public class PlayerStats : MonoBehaviour
             damage -= damageToShields;
         }
 
-        // 2. Take Hearts
         if (damage > 0)
         {
             hearts -= damage;
+
             if (hearts <= 0)
             {
                 hearts = 0;
                 GameOver();
             }
         }
-     
+
         RefreshUI();
     }
 
-    public void AddCoins(int amount) { coins += amount; RefreshUI(); }
-    public void SpendCoins(int amount) { coins = Mathf.Max(0, coins - amount); RefreshUI(); }
-    public void AddShields(int amount) { shields += amount; RefreshUI(); }
+    public void AddCoins(int amount)
+    {
+        coins += amount;
+        RefreshUI();
+    }
+
+    public void SpendCoins(int amount)
+    {
+        coins = Mathf.Max(0, coins - amount);
+        RefreshUI();
+    }
+
+    public void AddShields(int amount)
+    {
+        shields += amount;
+        RefreshUI();
+    }
+
+    // SHOP UPGRADE METHODS
+    // Called by UpgradeManager
+
+    public void SetMaxHealth(int value)
+    {
+        maxHearts = value;
+        hearts = maxHearts;
+        RefreshUI();
+    }
+
+    public void SetArmor(float value)
+    {
+        armorReduction = value;
+    }
+
+    public void SetSpeedMultiplier(float value)
+    {
+        speedMultiplier = value;
+    }
+
+    public void SetWeaponDamageMultiplier(float value)
+    {
+        weaponDamageMultiplier = value;
+    }
 
     void GameOver()
     {
