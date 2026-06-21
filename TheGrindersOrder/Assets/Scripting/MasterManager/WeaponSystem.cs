@@ -226,7 +226,12 @@ public class WeaponSystem : MonoBehaviour
         Bullet bullet = bulletObject.GetComponent<Bullet>();
 
         if (bullet != null)
+        {
             bullet.damage = currentDamage;
+            bullet.speed = 20f;
+            bullet.lifeTime = 1.8f;
+            bullet.hitEffectDestroyTime = 0.2f;
+        }
     }
 
     //For ShotGun 
@@ -261,7 +266,12 @@ public class WeaponSystem : MonoBehaviour
             Bullet bullet = bulletObject.GetComponent<Bullet>();
 
             if (bullet != null)
+            {
                 bullet.damage = currentDamage;
+                bullet.speed = 16f;
+                bullet.lifeTime = 1.2f;
+                bullet.hitEffectDestroyTime = 0.25f;
+            }
         }
     }
 
@@ -276,8 +286,12 @@ public class WeaponSystem : MonoBehaviour
         Bullet bullet = bulletObject.GetComponent<Bullet>();
 
         if (bullet != null)
+        {
             bullet.damage = currentDamage;
-
+            bullet.speed = 12f;
+            bullet.lifeTime = 2.5f;
+            bullet.hitEffectDestroyTime = 0.35f;
+        }
     }
 
     void StartReload()
