@@ -188,7 +188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -220.7193}
+  m_AnchoredPosition: {x: -132, y: -278}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &71803329
@@ -277,7 +277,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -254.27528, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -322,34 +322,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopSystem
   useCSV: 1
   upgradeOptions:
-  - category: health
-    displayName: Health Upgrade
-    maxLevel: 5
-    costPerLevel: 050000000a000000140000002300000037000000
-    effectType: max_hearts
-    effectPerLevel:
-    - 6
-    - 7
-    - 8
-    - 9
-    - 10
-    effectDescription: Max Hearts
   - category: armor
     displayName: Armor Upgrade
     maxLevel: 5
-    costPerLevel: 050000000a000000140000002300000037000000
+    costPerLevel: 0300000005000000070000000a0000000f000000
     effectType: damage_reduction
     effectPerLevel:
-    - 0.1
     - 0.2
-    - 0.3
-    - 0.4
+    - 0.35
     - 0.5
+    - 0.65
+    - 0.8
     effectDescription: Damage Reduction
   - category: speed
     displayName: Speed Upgrade
     maxLevel: 5
-    costPerLevel: 050000000a000000140000002300000037000000
+    costPerLevel: 0300000005000000070000000a0000000f000000
     effectType: speed_multiplier
     effectPerLevel:
     - 1.1
@@ -361,7 +349,7 @@ MonoBehaviour:
   - category: weapon
     displayName: Weapon Upgrade
     maxLevel: 5
-    costPerLevel: 050000000a000000140000002300000037000000
+    costPerLevel: 0300000005000000070000000a0000000f000000
     effectType: damage_multiplier
     effectPerLevel:
     - 1.1
@@ -545,7 +533,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -25}
+  m_AnchoredPosition: {x: -146, y: -26}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &196878432
@@ -568,7 +556,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -634,7 +624,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: -294.71454, w: -15.862974}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1059,7 +1049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 494.85876, y: -285.323}
+  m_AnchoredPosition: {x: 250, y: -350}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &281690695
@@ -1218,7 +1208,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1769,7 +1759,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: $100
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2303,7 +2293,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3307,7 +3297,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3558,11 +3548,11 @@ RectTransform:
   m_Children:
   - {fileID: 1508643509}
   - {fileID: 291574482}
-  m_Father: {fileID: 1458459757}
+  m_Father: {fileID: 1336524902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 410.30255, y: 0}
+  m_AnchoredPosition: {x: -30, y: -200}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &886719930
@@ -4487,7 +4477,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1173408289
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4609,7 +4599,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1336524902
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4624,6 +4614,7 @@ RectTransform:
   m_Children:
   - {fileID: 1525136340}
   - {fileID: 1458459757}
+  - {fileID: 886719929}
   - {fileID: 281690694}
   m_Father: {fileID: 937169351}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4876,12 +4867,11 @@ RectTransform:
   m_Children:
   - {fileID: 1873707680}
   - {fileID: 1992352013}
-  - {fileID: 886719929}
   m_Father: {fileID: 1336524902}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -255.57385, y: -285.323}
+  m_AnchoredPosition: {x: -30, y: -500}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1458459758
@@ -5027,7 +5017,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c5b6741af5f62c4cbffb18ada056318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
-  csvFile: {fileID: 4900000, guid: aece1a82483e9cc468dabd3f559faccf, type: 3}
 --- !u!1 &1467981130
 GameObject:
   m_ObjectHideFlags: 0
@@ -5065,7 +5054,7 @@ MonoBehaviour:
   playerStatsCSV: {fileID: 4900000, guid: 98ccd1baef027734e9f7d6442ed08538, type: 3}
   hearts: 5
   shields: 3
-  coins: 0
+  coins: 15
   startWeaponID: weapon_pistol
   maxHearts: 5
   armorReduction: 0
@@ -5264,7 +5253,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -5594,7 +5583,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -597.8058, y: -285.323}
+  m_AnchoredPosition: {x: -300, y: -350}
   m_SizeDelta: {x: 200, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1525136341
@@ -5862,9 +5851,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0abb83e1c37564aae98a8f448b0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  levelLoader: {fileID: 1886668269}
-  enemySpawner: {fileID: 2015148726}
-  startLevel: 1
+  weaponPrefab: {fileID: 0}
 --- !u!4 &1613559801
 Transform:
   m_ObjectHideFlags: 0
@@ -6838,7 +6825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec4b3061220e264993117cc1790ca18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelLoader
-  csvFile: {fileID: 4900000, guid: 0d447d4327e86ab489a4ec890e2de77b, type: 3}
 --- !u!4 &1886668270
 Transform:
   m_ObjectHideFlags: 0
@@ -6901,7 +6887,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1960249074
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6940,7 +6926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594d407987be1ef47a1cc760aa1878eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopDetailPageUI
-  shopSystem: {fileID: 0}
+  shopSystem: {fileID: 78306567}
   categoryListPage: {fileID: 1336524901}
   detailPage: {fileID: 1960249073}
   backButton: {fileID: 141469641}
@@ -7216,7 +7202,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Level 1
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7325,13 +7311,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab8ebeb30acb6342b539f6671aeed27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  levels: []
-  defaultSpawnPoints:
-  - {fileID: 1873804514}
-  - {fileID: 1888153967}
-  - {fileID: 1455369173}
-  maxActiveHumans: 5
   enemyPrefab: {fileID: 1467981130}
+  spawnPoints: []
 --- !u!4 &2015148727
 Transform:
   m_ObjectHideFlags: 0
@@ -8241,7 +8222,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 345.24573}
+  m_AnchoredPosition: {x: 0, y: 300.4525}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2114898393

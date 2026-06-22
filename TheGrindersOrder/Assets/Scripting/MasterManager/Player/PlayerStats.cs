@@ -201,25 +201,34 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        damage = Mathf.RoundToInt(damage * (1f - armorReduction));
-        damage = Mathf.Max(0, damage);
-
         if (shields > 0)
         {
-            int damageToShields = Mathf.Min(damage, shields);
-            shields -= damageToShields;
-            damage -= damageToShields;
+            for (int i = 0; i < damage; i++)
+            {
+                bool armorBlocked = Random.value < armorReduction;
+
+                if (armorBlocked)
+                {
+                    Debug.Log("Armor blocked shield damage.");
+                    continue;
+                }
+
+                shields--;
+
+                if (shields <= 0)
+                    break;
+            }
+
+            RefreshUI();
+            return;
         }
 
-        if (damage > 0)
-        {
-            hearts -= damage;
+        hearts -= damage;
 
-            if (hearts <= 0)
-            {
-                hearts = 0;
-                GameOver();
-            }
+        if (hearts <= 0)
+        {
+            hearts = 0;
+            GameOver();
         }
 
         RefreshUI();

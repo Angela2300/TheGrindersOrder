@@ -42,36 +42,53 @@ public class DraggableInventoryItem : MonoBehaviour,
                 shopSellArea,
                 eventData.position))
         {
-            // ===========================================
-            // SHOP HANDOVER SECTION
-            // ===========================================
-            //
-            // Next developer should implement:
-            //
-            // 1. Determine what item was dropped
-            //    (Meat, Weapon, Medkit, etc.)
+            Inventory inventory = startParent.GetComponentInParent<Inventory>();
+            PlayerStats playerStats = inventory.GetComponent<PlayerStats>();
 
-            // Maybe medkit no need put in inventory can just buy from shop instantd replenish health and shields 
-            //
-            // 2. Remove the item from the inventory upon purchase (meat count is part of inventory code)
-            //
-            // 3. Give the player coins  (check playerstats cs)
-            //
-            // Example:
-            //
-            // inventory.RemoveMeat();
-            // playerStats.AddCoins(5);
-            //
-            // or
-            //
-            // inventory.RemoveWeapon();
-            // playerStats.AddCoins(20);
-            //
-            // 4. Refresh inventory UI
-            //
-            // inventoryUI.UpdateInventory(...);
-            //
-            // ===========================================
+            if (inventory == null || playerStats == null)
+            {
+                Debug.LogWarning("Missing Inventory or PlayerStats.");
+                return;
+            }
+
+            int slotIndex = startParent.GetSiblingIndex();
+
+            if (slotIndex < 0 || slotIndex >= inventory.maxSlots)
+            {
+                Debug.LogWarning("Invalid inventory slot.");
+                return;
+            }
+
+            InventorySlotType slotType = inventory.slotTypes[slotIndex];
+
+            if (slotType == InventorySlotType.Meat)
+            {
+                if (inventory.meatCount > 0)
+                {
+                    inventory.meatCount--;
+                    playerStats.AddCoins(5);
+                    Debug.Log("Sold 1 meat for 5 coins.");
+                }
+            }
+            else if (slotType == InventorySlotType.Weapon)
+            {
+                inventory.slotUsed[slotIndex] = false;
+                inventory.slotTypes[slotIndex] = InventorySlotType.Empty;
+                inventory.weapons[slotIndex] = default;
+
+                playerStats.AddCoins(20);
+                Debug.Log("Sold weapon for 20 coins.");
+            }
+
+            if (inventory.inventoryUI != null)
+            {
+                inventory.inventoryUI.UpdateInventory(
+                    inventory.weapons,
+                    inventory.slotUsed,
+                    inventory.slotTypes,
+                    inventory.meatCount
+                );
+            }
 
             Debug.Log("Sell item here");
         }
