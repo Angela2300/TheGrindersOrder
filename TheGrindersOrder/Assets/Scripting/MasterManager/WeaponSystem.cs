@@ -2,10 +2,10 @@ using UnityEngine;
 
 public enum WeaponType
 {
-    Pistol, // 10 dmg
-    SMG, // 5 dmg
-    Shotgun, // 15 dmg
-    Launcher // 30 dmg
+    Pistol,   // 10 dmg
+    SMG,      // 5 dmg
+    Shotgun,  // 15 dmg
+    Launcher  // 30 dmg
 }
 
 public class WeaponSystem : MonoBehaviour
@@ -13,7 +13,6 @@ public class WeaponSystem : MonoBehaviour
     [Header("Current State")]
     public WeaponType currentWeapon = WeaponType.Pistol;
 
-    //Updated Bullet
     [Header("Bullet Setup")]
     public GameObject bulletPrefab;
     public GameObject launcherBulletPrefab;
@@ -42,8 +41,7 @@ public class WeaponSystem : MonoBehaviour
     public GameObject shotgunPrefab;
     public GameObject launcherPrefab;
 
-    public Transform weaponHolder; // Child object where weapons appear
-
+    public Transform weaponHolder;
     GameObject currentWeaponVisual;
 
     public void ManualReload()
@@ -69,10 +67,9 @@ public class WeaponSystem : MonoBehaviour
 
         currentWeapon = weaponType;
         ApplyWeaponStats(currentWeapon);
-        UpdatePlayerVisual(); // Update weapon shown on player
+        UpdatePlayerVisual();
     }
 
-    //Updated
     void ApplyWeaponStats(WeaponType weaponType)
     {
         if (weaponsCSV == null)
@@ -81,45 +78,35 @@ public class WeaponSystem : MonoBehaviour
             return;
         }
 
-        // Split CSV into rows
         string[] lines = weaponsCSV.text.Split('\n');
-
-        // Convert enum name to match csv
         string targetID = "weapon_" + weaponType.ToString().ToLower();
 
-        // Skip row 0 because it is the header
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
+            if (string.IsNullOrWhiteSpace(line)) continue;
 
             string[] values = line.Split(',');
-            if (values.Length < 7)
-                continue;
+            if (values.Length < 7) continue;
 
             if (values[0] == targetID)
             {
-                float dmg, rTime, fRate;
-                int ammo;
-
-                if (float.TryParse(values[3], out dmg)) currentDamage = dmg;
-                if (int.TryParse(values[4], out ammo)) maxAmmo = ammo;
-                if (float.TryParse(values[5], out rTime)) reloadTime = rTime;
-                if (float.TryParse(values[6], out fRate)) fireRate = fRate;
-
+                if (float.TryParse(values[3], out float dmg)) currentDamage = dmg;
+                if (int.TryParse(values[4], out int ammo)) maxAmmo = ammo;
+                if (float.TryParse(values[5], out float rTime)) reloadTime = rTime;
+                if (float.TryParse(values[6], out float fRate)) fireRate = fRate;
                 break;
             }
         }
 
-        // choose bullet prefab
+        // Fix self-assignment warning
         switch (weaponType)
         {
             case WeaponType.Launcher:
                 bulletPrefab = launcherBulletPrefab;
                 break;
             default:
-                bulletPrefab = bulletPrefab;
+                // Keep the existing bulletPrefab (no redundant assignment)
                 break;
         }
 
@@ -130,9 +117,7 @@ public class WeaponSystem : MonoBehaviour
     public void TryShoot(Vector2 direction)
     {
         if (isReloading) return;
-
-        if (Time.time - lastShotTime < fireRate)
-            return;
+        if (Time.time - lastShotTime < fireRate) return;
 
         if (currentAmmo <= 0)
         {
@@ -141,90 +126,46 @@ public class WeaponSystem : MonoBehaviour
         }
 
         Fire(direction);
-
         currentAmmo--;
         lastShotTime = Time.time;
 
-        if (currentAmmo <= 0)
-        {
-            StartReload();
-        }
+        if (currentAmmo <= 0) StartReload();
     }
 
     void UpdatePlayerVisual()
     {
-        // Remove old weapon model
-        if (currentWeaponVisual != null)
+        if (currentWeaponVisual != null) Destroy(currentWeaponVisual);
+
+        GameObject prefabToSpawn = currentWeapon switch
         {
-            Destroy(currentWeaponVisual);
-        }
-
-        GameObject prefabToSpawn = null;
-
-        switch (currentWeapon)
-        {
-            case WeaponType.Pistol:
-                prefabToSpawn = pistolPrefab;
-                break;
-
-            case WeaponType.SMG:
-                prefabToSpawn = smgPrefab;
-                break;
-
-            case WeaponType.Shotgun:
-                prefabToSpawn = shotgunPrefab;
-                break;
-
-            case WeaponType.Launcher:
-                prefabToSpawn = launcherPrefab;
-                break;
-        }
+            WeaponType.Pistol => pistolPrefab,
+            WeaponType.SMG => smgPrefab,
+            WeaponType.Shotgun => shotgunPrefab,
+            WeaponType.Launcher => launcherPrefab,
+            _ => null
+        };
 
         if (prefabToSpawn != null)
         {
-            currentWeaponVisual = Instantiate(
-                prefabToSpawn,
-                weaponHolder.position,
-                weaponHolder.rotation,
-                weaponHolder
-            );
+            currentWeaponVisual = Instantiate(prefabToSpawn, weaponHolder.position, weaponHolder.rotation, weaponHolder);
         }
     }
-
 
     void Fire(Vector2 direction)
     {
         switch (currentWeapon)
         {
-            case WeaponType.Pistol:
-                FireSingle();
-                break;
-
-            case WeaponType.SMG:
-                FireSpread(1, 8f, true);
-                break;
-
-            case WeaponType.Shotgun:
-                FireSpread(5, 30f, false);
-                break;
-
-            case WeaponType.Launcher:
-                FireLauncher();
-                break;
+            case WeaponType.Pistol: FireSingle(); break;
+            case WeaponType.SMG: FireSpread(1, 8f, true); break;
+            case WeaponType.Shotgun: FireSpread(5, 30f, false); break;
+            case WeaponType.Launcher: FireLauncher(); break;
         }
     }
 
-    // For Pistol & SMG
     void FireSingle()
     {
-        GameObject bulletObject = Instantiate(
-            bulletPrefab,
-            firePoint.position,
-            firePoint.rotation
-        );
-
+        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
-
         if (bullet != null)
         {
             bullet.damage = currentDamage;
@@ -234,37 +175,18 @@ public class WeaponSystem : MonoBehaviour
         }
     }
 
-    //For ShotGun 
     void FireSpread(int bulletCount, float spreadAngle, bool randomSpread)
     {
         for (int i = 0; i < bulletCount; i++)
         {
-            float angleOffset;
+            float angleOffset = randomSpread
+                ? Random.Range(-spreadAngle, spreadAngle)
+                : Mathf.Lerp(-spreadAngle, spreadAngle, i / (float)(bulletCount - 1));
 
-            if (randomSpread)
-            {
-                angleOffset = Random.Range(-spreadAngle, spreadAngle);
-            }
-            else
-            {
-                angleOffset = Mathf.Lerp(
-                    -spreadAngle,
-                    spreadAngle,
-                    i / (float)(bulletCount - 1)
-                );
-            }
-
-            Quaternion spreadRotation =
-                firePoint.rotation * Quaternion.Euler(0, 0, angleOffset);
-
-            GameObject bulletObject = Instantiate(
-                bulletPrefab,
-                firePoint.position,
-                spreadRotation
-            );
+            Quaternion spreadRotation = firePoint.rotation * Quaternion.Euler(0, 0, angleOffset);
+            GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, spreadRotation);
 
             Bullet bullet = bulletObject.GetComponent<Bullet>();
-
             if (bullet != null)
             {
                 bullet.damage = currentDamage;
@@ -277,14 +199,8 @@ public class WeaponSystem : MonoBehaviour
 
     void FireLauncher()
     {
-        GameObject bulletObject = Instantiate(
-        bulletPrefab,
-        firePoint.position,
-        firePoint.rotation
-    );
-
+        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Bullet bullet = bulletObject.GetComponent<Bullet>();
-
         if (bullet != null)
         {
             bullet.damage = currentDamage;

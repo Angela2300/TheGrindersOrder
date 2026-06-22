@@ -9,19 +9,18 @@ public class EnemyData
 
     // Combat Stats
     public float damageHearts;
-    public float damageLives;
-    public float health;
- 
+    public int damageLives;
+    public int health;
 
     // Movement & Behavior
     public string moveSpeedTier;
-    public string moveSpeedValue;
+    public float moveSpeedValue;
     public string rangeTier;
     public bool followsPlayer;
 
     // Loot
-    public string meatDropAmt;
-    public string coinDropAmt;
+    public int meatDropAmt;
+    public int coinDropAmt;
     public string weaponId;
     public int spawnCount;
     public bool isBomber;

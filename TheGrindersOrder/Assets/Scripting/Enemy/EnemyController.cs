@@ -1,280 +1,138 @@
-//using UnityEngine;
-
-//public class EnemyController : MonoBehaviour
-//{
-//    public string enemyID;
-//    private EnemyData stats;
-//    private Transform target;
-
-//    private float attackTimer = 0f;
-//    public float attackCooldown = 1.5f;
-//    private PlayerStats targetStats;
-
-//    private float GetRangeValue(string tier)
-//    {
-//        return tier switch
-//        {
-//            "Short" => 1.5f,
-//            "Close" => 3.0f,
-//            "Explosion" => 4.0f,
-//            "Large" => 6.0f,
-//            "Largest" => 10.0f,
-//            _ => 2.0f
-//        };
-//    }
-
-//    public void Setup(string id)
-//    {
-//        enemyID = id;
-//        if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
-//        {
-//            InitializeEnemy(stats);
-//        }
-//        else
-//        {
-//            Debug.LogError($"Database Error: Could not find ID '{enemyID}'");
-//        }
-//    }
-//    private bool hasHitPlayer = false;
-
-//    void Start()
-//    {
-//        Debug.Log("EnemyController: Start() has been called!"); // FORCE A MESSAGE
-//        // 1. Initialize stats from Database
-//        if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
-//        {
-//            InitializeEnemy(stats);
-//        }
-//        else
-//        {
-//            Debug.LogError($"Enemy ID '{enemyID}' not found in database!");
-//        }
-
-//        // 2. Find Player (Ensure the object in your scene is Tagged as "Player")
-//        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-//        if (playerObj != null)
-//        {
-//            target = playerObj.transform;
-//        }
-//        else
-//        {
-//            Debug.LogError("Player object with tag 'Player' not found!");
-//        }
-//    }
-
-//    void Update()
-//    {
-//        if (stats == null || target == null) return;
-
-//        float distance = Vector3.Distance(transform.position, target.position);
-//        float attackRange = GetRangeValue(stats.rangeTier);
-
-//        // Stop moving if close
-//        if (distance <= attackRange)
-//        {
-//            // NO MOVEMENT HERE = Enemy stops moving
-//            if (attackTimer <= 0)
-//            {
-//                PerformAttack();
-//                attackTimer = attackCooldown;
-//            }
-//        }
-//        else
-//        {
-//            // Move towards target
-//            if (float.TryParse(stats.moveSpeedValue, out float speed))
-//            {
-//                transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-//            }
-//        }
-
-//        if (attackTimer > 0) attackTimer -= Time.deltaTime;
-//    }
-
-//    void PerformAttack()
-//    {
-//        // Use OverlapSphere to find the player within attack range
-//        float attackRange = GetRangeValue(stats.rangeTier);
-
-//        // Changed from Physics.OverlapSphere -> Physics2D.OverlapCircleAll
-//        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
-
-//        foreach (var hitCollider in hitColliders)
-//        {
-//            PlayerStats player = hitCollider.GetComponent<PlayerStats>();
-//            if (player != null)
-//            {
-//                int damageToDeal = GetDamageForEnemyType();
-//                player.TakeDamage(damageToDeal);
-//                Debug.Log($"SUCCESS: {gameObject.name} dealt {damageToDeal} damage to {hitCollider.name}!");
-//                break; // Stop after hitting the player once
-//            }
-//        }
-//        int GetDamageForEnemyType()
-//        {
-//            Debug.Log("Getting damage for ID: " + enemyID);
-
-//            // Trim the string to remove accidental spaces and ignore case
-//            string id = enemyID.Trim();
-
-//            if (id.Equals("Small", System.StringComparison.OrdinalIgnoreCase)) return 1;
-//            if (id.Equals("MediumV1", System.StringComparison.OrdinalIgnoreCase)) return 2;
-//            if (id.Equals("Bomber", System.StringComparison.OrdinalIgnoreCase)) return 2;
-//            if (id.Equals("Large", System.StringComparison.OrdinalIgnoreCase)) return 3;
-//            if (id.Equals("Boss", System.StringComparison.OrdinalIgnoreCase)) return 4;
-
-//            Debug.LogWarning("Enemy ID '" + id + "' not found! Returning 1 damage.");
-//            return 1; // Default fallback
-//        }
-
-//        void OnDrawGizmosSelected()
-//        {
-//            if (stats != null)
-//            {
-//                Gizmos.color = Color.red;
-//                Gizmos.DrawWireSphere(transform.position, GetRangeValue(stats.rangeTier));
-//            }
-//        }
-
-//        void InitializeEnemy(EnemyData data)
-//        {
-//            gameObject.name = data.displayName;
-//        }
-//    }
-//}
-
-
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
     public string enemyID;
-    private EnemyData stats;
-    private Transform target;
-
-    private float attackTimer = 0f;
     public float attackCooldown = 1.5f;
-    private PlayerStats targetStats;
 
-    private float GetRangeValue(string tier)
-    {
-        return tier switch
-        {
-            "Short" => 1.5f,
-            "Close" => 3.0f,
-            "Explosion" => 4.0f,
-            "Large" => 6.0f,
-            "Largest" => 10.0f,
-            _ => 2.0f
-        };
-    }
+    [HideInInspector] public EnemyManager manager;
+    [HideInInspector] public EnemyData stats;
+
+    private float attackTimer;
+    private Transform player;
+
+    public GameObject bulletPrefab;
+
+    private int bossAttackPhase = 0;
 
     public void Setup(string id)
     {
-        enemyID = id;
-        if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
-        {
-            InitializeEnemy(stats);
-        }
-        else
-        {
-            Debug.LogError($"Database Error: Could not find ID '{enemyID}'");
-        }
-    }
+        enemyID = id.ToLower();
 
-    void Start()
-    {
-        Debug.Log("EnemyController: Start() has been called!");
-        if (EnemyManager.enemyDatabase.TryGetValue(enemyID, out stats))
+        if (manager != null && EnemyManager.enemyDatabase.ContainsKey(enemyID))
         {
-            InitializeEnemy(stats);
-        }
-        else
-        {
-            Debug.LogError($"Enemy ID '{enemyID}' not found in database!");
-        }
+            stats = EnemyManager.enemyDatabase[enemyID];
+            Debug.Log("Enemy setup complete: " + stats.displayName);
 
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null)
-        {
-            target = playerObj.transform;
-        }
-        else
-        {
-            Debug.LogError("Player object with tag 'Player' not found!");
-        }
-    }
-
-    void Update()
-    {
-        if (stats == null || target == null) return;
-
-        float distance = Vector3.Distance(transform.position, target.position);
-        float attackRange = GetRangeValue(stats.rangeTier);
-
-        if (distance <= attackRange)
-        {
-            if (attackTimer <= 0)
+            var dropScript = GetComponent<EnemyDummyDropWeapon>();
+            if (dropScript != null)
             {
-                PerformAttack();
-                attackTimer = attackCooldown;
+                dropScript.maxHealth = stats.health;
+                dropScript.CurrentHealth = stats.health;
             }
         }
         else
         {
-            if (float.TryParse(stats.moveSpeedValue, out float speed))
-            {
-                transform.position = Vector3.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-            }
+            Debug.LogWarning("Enemy setup failed: no data for ID " + enemyID);
         }
 
-        if (attackTimer > 0) attackTimer -= Time.deltaTime;
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
     }
 
-    void PerformAttack()
+    private void Update()
     {
-        float attackRange = GetRangeValue(stats.rangeTier);
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, attackRange);
+        if (stats == null) return;
 
-        foreach (var hitCollider in hitColliders)
+        if (stats.followsPlayer && player != null)
         {
-            PlayerStats player = hitCollider.GetComponent<PlayerStats>();
-            if (player != null)
-            {
-                int damageToDeal = GetDamageForEnemyType();
-                player.TakeDamage(damageToDeal);
-                Debug.Log($"SUCCESS: {gameObject.name} dealt {damageToDeal} damage to {hitCollider.name}!");
-                break;
-            }
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                player.position,
+                stats.moveSpeedValue * Time.deltaTime
+            );
         }
-    }
 
-    int GetDamageForEnemyType()
-    {
-        Debug.Log("Getting damage for ID: " + enemyID);
-        string id = enemyID.Trim();
-
-        if (id.Equals("Small", System.StringComparison.OrdinalIgnoreCase)) return 1;
-        if (id.Equals("MediumV1", System.StringComparison.OrdinalIgnoreCase)) return 2;
-        if (id.Equals("Bomber", System.StringComparison.OrdinalIgnoreCase)) return 2;
-        if (id.Equals("Large", System.StringComparison.OrdinalIgnoreCase)) return 3;
-        if (id.Equals("Boss", System.StringComparison.OrdinalIgnoreCase)) return 4;
-
-        Debug.LogWarning("Enemy ID '" + id + "' not found! Returning 1 damage.");
-        return 1;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (stats != null)
+        attackTimer += Time.deltaTime;
+        if (attackTimer >= attackCooldown)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, GetRangeValue(stats.rangeTier));
+            Attack();
+            attackTimer = 0f;
         }
     }
 
-    void InitializeEnemy(EnemyData data)
+    private void Attack()
     {
-        gameObject.name = data.displayName;
+        if (player == null) return;
+
+        float distance = Vector3.Distance(transform.position, player.position);
+        string tier = stats.rangeTier.ToLower();
+
+        if (tier == "largest")
+        {
+            switch (bossAttackPhase)
+            {
+                case 0: PerformCloseAttack(distance); attackCooldown = 1.5f; break;
+                case 1: PerformShortAttack(distance); attackCooldown = 2.5f; break;
+                case 2: PerformExplosionAttack(distance); attackCooldown = 4f; break;
+                case 3: PerformLargeAttack(distance); attackCooldown = 5f; break;
+            }
+            bossAttackPhase = (bossAttackPhase + 1) % 4;
+            return;
+        }
+
+        if (tier == "close") { PerformCloseAttack(distance); attackCooldown = 1.5f; }
+        else if (tier == "short") { PerformShortAttack(distance); attackCooldown = 2.5f; }
+        else if (tier == "explosion") { PerformExplosionAttack(distance); attackCooldown = 4f; }
+        else if (tier == "large") { PerformLargeAttack(distance); attackCooldown = 5f; }
+    }
+
+    private void PerformCloseAttack(float distance)
+    {
+        if (distance > 2f) return;
+        var playerStats = player.GetComponent<PlayerStats>();
+        if (playerStats != null) playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts));
+    }
+
+    private void PerformShortAttack(float distance)
+    {
+        if (distance > 4f) return;
+        FireBullet();
+    }
+
+    private void PerformExplosionAttack(float distance)
+    {
+        if (distance > 2.5f) return;
+        var playerStats = player.GetComponent<PlayerStats>();
+        if (playerStats != null) playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts * 2));
+    }
+
+    private void PerformLargeAttack(float distance)
+    {
+        if (distance > 8f) return;
+        FireBullet();
+    }
+
+    private void FireBullet()
+    {
+        if (bulletPrefab == null) return;
+
+        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+        Vector2 direction = (player.position - transform.position).normalized;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+
+        Bullet bulletScript = bullet.GetComponent<Bullet>();
+        if (bulletScript != null) bulletScript.damage = stats.damageHearts;
+
+        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = direction * (bulletScript != null ? bulletScript.speed : 10f);
+    }
+
+    public void Die()
+    {
+        if (manager != null)
+            Object.FindFirstObjectByType<LevelManager>().RegisterCustomerServed(gameObject);
+
+        Destroy(gameObject);
     }
 }

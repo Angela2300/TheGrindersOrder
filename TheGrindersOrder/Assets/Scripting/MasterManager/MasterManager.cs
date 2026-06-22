@@ -4,7 +4,6 @@ public class MasterManager : MonoBehaviour
 {
     public static MasterManager Instance { get; private set; }
 
-
     [Header("Game Systems")]
     public PlayerController player;
     public WeaponSystem weaponSystem;
@@ -29,13 +28,13 @@ public class MasterManager : MonoBehaviour
     void AutoWireReferences()
     {
         if (player == null)
-            player = FindObjectOfType<PlayerController>();
+            player = Object.FindFirstObjectByType<PlayerController>();
 
         if (weaponSystem == null && player != null)
             weaponSystem = player.GetComponentInChildren<WeaponSystem>();
 
         if (weaponSystem == null)
-            weaponSystem = FindObjectOfType<WeaponSystem>();
+            weaponSystem = Object.FindFirstObjectByType<WeaponSystem>();
     }
 
     void InitializeSystems()

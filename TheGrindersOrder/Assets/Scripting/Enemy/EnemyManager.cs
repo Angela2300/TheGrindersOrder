@@ -1,56 +1,73 @@
-using UnityEngine; 
-using System.Collections.Generic; 
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+
 public class EnemyManager : MonoBehaviour
-
 {
-    public TextAsset csvFile;
-
     public static Dictionary<string, EnemyData> enemyDatabase = new Dictionary<string, EnemyData>();
 
-    void Awake()
+    private void Awake()
     {
-        Debug.Log("EnemyManager Awake is running");
-        LoadCSV();
+        LoadEnemyDatabase();
     }
 
-    void LoadCSV()
+    private void LoadEnemyDatabase()
     {
-        if (csvFile == null)
+        enemyDatabase.Clear();
+        string path = Application.dataPath + "/Scripting/CSVs/Enemies.csv";
+
+        if (!File.Exists(path))
         {
-            Debug.LogError("CSV NOT ASSIGNED!");
+            Debug.LogError("Enemies.csv not found at " + path);
             return;
         }
 
-        Debug.Log("CSV loaded: " + csvFile.name);
-
-        string[] lines = csvFile.text.Split('\n');
+        string[] lines = File.ReadAllLines(path);
 
         for (int i = 1; i < lines.Length; i++)
         {
-            if (string.IsNullOrWhiteSpace(lines[i])) continue;
+            string line = lines[i];
+            if (string.IsNullOrWhiteSpace(line)) continue;
 
-            string[] row = lines[i].Split(',');
+            string[] values = line.Split(',');
+            if (values.Length < 17) continue;
+
+            string id = values[0].Trim().ToLower();
 
             EnemyData data = new EnemyData
             {
-                enemyID = row[0].Trim(),
-                displayName = row[1].Trim(),
-                role = row[2].Trim(),
-                damageHearts = float.Parse(row[4]),
-                damageLives = float.Parse(row[5]),
-                health = float.Parse(row[6]),
-                moveSpeedTier = row[7].Trim(),
-                moveSpeedValue = row[8].Trim(),
-                rangeTier = row[9].Trim(),
-                followsPlayer = bool.Parse(row[10]),
-                meatDropAmt = row[11].Trim(),
-                coinDropAmt = row[12].Trim(),
-                weaponId = row[13].Trim(),
+                enemyID = id,
+                displayName = values[1].Trim(),
+                role = values[2].Trim(),
+                attackType = values[3].Trim(),
+                damageHearts = float.Parse(values[4]),
+                damageLives = int.Parse(values[5]),
+                health = int.Parse(values[6]),
+                moveSpeedTier = values[7].Trim(),
+                moveSpeedValue = float.Parse(values[8]),
+                rangeTier = values[9].Trim(),
+                followsPlayer = values[10].Trim().ToLower() == "true",
+                meatDropAmt = int.Parse(values[11]),
+                coinDropAmt = int.Parse(values[12]),
+                weaponId = values[13].Trim().ToLower(),
+                spawnCount = string.IsNullOrWhiteSpace(values[15]) ? 0 : int.Parse(values[15]),
+                isBomber = values[16].Trim().ToLower() == "true"
             };
 
-            enemyDatabase[data.enemyID] = data;
+            if (!enemyDatabase.ContainsKey(id))
+            {
+                enemyDatabase.Add(id, data);
+                Debug.Log("Loaded enemy ID: [" + id + "]");
+            }
+        }
+    }
 
-            Debug.Log("Loaded enemy: " + data.enemyID);
+    public void RegisterEnemy(GameObject enemy)
+    {
+        var controller = enemy.GetComponent<EnemyController>();
+        if (controller != null)
+        {
+            controller.manager = this;
         }
     }
 }

@@ -757,7 +757,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::WeaponSystem
   currentWeapon: 0
   bulletPrefab: {fileID: 925736216617855593, guid: c5ac71cc6bf32bf418d3b31d53b85106, type: 3}
-  launcherBulletPrefab: {fileID: 925736216617855593, guid: 08bfa865300c5894e9ce86337a190c58, type: 3}
+  launcherBulletPrefab: {fileID: 0}
   firePoint: {fileID: 1775227630}
   weaponsCSV: {fileID: 4900000, guid: c6222614590108a4382fb18aef9b9996, type: 3}
   pistolPrefab: {fileID: 2909629809158839127, guid: 064c38e384ca89c468e4352ed13599b4, type: 3}
@@ -2952,7 +2952,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0abb83e1c37564aae98a8f448b0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  weaponPrefab: {fileID: 3193358891787835273, guid: 423ff89f1780c324692f11ff1c364f0b, type: 3}
+  levelLoader: {fileID: 1886668269}
+  enemySpawner: {fileID: 2015148726}
+  startLevel: 1
+  levelWeaponPrefabs: []
+  levelWeaponPrefab: {fileID: 0}
 --- !u!4 &1613559801
 Transform:
   m_ObjectHideFlags: 0
@@ -3483,6 +3487,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec4b3061220e264993117cc1790ca18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelLoader
+  csvFile: {fileID: 4900000, guid: 0d447d4327e86ab489a4ec890e2de77b, type: 3}
 --- !u!4 &1886668270
 Transform:
   m_ObjectHideFlags: 0
@@ -3523,7 +3528,7 @@ Transform:
   m_GameObject: {fileID: 1888153966}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -5.15, z: 10}
+  m_LocalPosition: {x: 0, y: 1.84, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3689,11 +3694,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab8ebeb30acb6342b539f6671aeed27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefab: {fileID: 7759131747936290795, guid: 605d146f2b8c9be4696be54e82aff566, type: 3}
-  spawnPoints:
+  defaultSpawnPoints:
   - {fileID: 1873804514}
   - {fileID: 1888153967}
   - {fileID: 1455369173}
+  smallPrefab: {fileID: 7759131747936290795, guid: 605d146f2b8c9be4696be54e82aff566, type: 3}
+  mediumPrefab: {fileID: 5299295395274665742, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
+  bomberPrefab: {fileID: 6301722452126551409, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
+  largePrefab: {fileID: 3726477431155707728, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
+  bossPrefab: {fileID: 7463149923302653149, guid: 3d6d9f3502d219d48ab644b40bea4924, type: 3}
 --- !u!4 &2015148727
 Transform:
   m_ObjectHideFlags: 0
@@ -4535,10 +4544,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_Knight
       objectReference: {fileID: 0}
-    - target: {fileID: 3726477431155707728, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4540336663182099874, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
       propertyPath: m_Interpolate
       value: 1
@@ -4721,10 +4726,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boss_Bartender
       objectReference: {fileID: 0}
-    - target: {fileID: 7463149923302653149, guid: 3d6d9f3502d219d48ab644b40bea4924, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4745,10 +4746,6 @@ PrefabInstance:
     - target: {fileID: 5299295395274665742, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
       propertyPath: m_Name
       value: Enemy_ShotgunTownsperson
-      objectReference: {fileID: 0}
-    - target: {fileID: 5299295395274665742, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5927684427493274967, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
       propertyPath: m_Interpolate
@@ -4880,10 +4877,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy_BomberTownsperson
       objectReference: {fileID: 0}
-    - target: {fileID: 6301722452126551409, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7689883733645851279, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
       propertyPath: m_Interpolate
       value: 1
@@ -4972,10 +4965,6 @@ PrefabInstance:
     - target: {fileID: 7759131747936290795, guid: 605d146f2b8c9be4696be54e82aff566, type: 3}
       propertyPath: m_Name
       value: Enemy_Farmer
-      objectReference: {fileID: 0}
-    - target: {fileID: 7759131747936290795, guid: 605d146f2b8c9be4696be54e82aff566, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

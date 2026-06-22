@@ -8,6 +8,6 @@ public class LevelData
     public int bomberCount;
     public int largeCount;
     public int bossCount;
-    public float timeLimit;
-    public int customersToServe;
+    public int timeLimit;        
+    public int customersToServe;  
 }

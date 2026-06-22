@@ -2,30 +2,60 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public LevelLoader levelLoader;
-    public EnemySpawner enemySpawner;
+    public LevelData currentLevel;
+    private int customersServed = 0;
+    private bool weaponDropped = false;
 
-    public int startLevel = 1;
+    public GameObject weaponPrefab;
 
-    void Start()
+    private void Start()
     {
-        StartLevel(startLevel);
+        if (LevelLoader.levels.Count > 0)
+        {
+            StartLevel(LevelLoader.levels[0]);
+        }
+        else
+        {
+            Debug.LogError("No levels loaded from LevelLoader!");
+        }
     }
 
-    void StartLevel(int levelID)
+    public void RegisterCustomerServed(GameObject enemyObj)
     {
-        LevelData level = levelLoader.GetLevel(levelID);
+        customersServed++;
+        Debug.Log("Customer served: " + customersServed);
 
-        if (level == null)
+        if (!weaponDropped && customersServed >= currentLevel.customersToServe)
         {
-            Debug.LogError("Level not found!");
+            if (weaponPrefab != null)
+            {
+                Instantiate(weaponPrefab, enemyObj.transform.position, Quaternion.identity);
+                Debug.Log("Weapon dropped at last enemy position.");
+            }
+            else
+            {
+                Debug.LogWarning("No weapon prefab assigned in LevelManager!");
+            }
+
+            weaponDropped = true;
+            Debug.Log("Level " + currentLevel.levelID + " complete!");
+        }
+    }
+
+    public void StartLevel(LevelData level)
+    {
+        currentLevel = level;
+        customersServed = 0;
+        weaponDropped = false;
+        Debug.Log("Starting Level " + currentLevel.levelID);
+
+        EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
+        if (spawner == null)
+        {
+            Debug.LogError("EnemySpawner not found in scene!");
             return;
         }
 
-        Debug.Log("Starting Level " + levelID);
-
-        enemySpawner.StartLevel(levelID);
+        StartCoroutine(spawner.SpawnWave(currentLevel));
     }
 }
-
-

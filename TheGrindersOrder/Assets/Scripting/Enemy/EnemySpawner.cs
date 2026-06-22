@@ -1,198 +1,69 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-[System.Serializable]
-public class LevelConfig
-{
-    public string levelName = "Level 1";
-    public float timeLimit = 30f;
-    public bool isUnlimitedTime = false;
-    public int quota = 3;
-    public float spawnInterval = 2f;
-
-    public GameObject humanPrefab;
-    public Transform[] spawnPoints;
-}
+using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
-    //[Level Configuration"]
-    public List<LevelConfig> levels = new List<LevelConfig>();
-    public Transform[] defaultSpawnPoints;
-    public int maxActiveHumans = 10;
     public GameObject enemyPrefab;
+    public Transform[] spawnPoints;
 
-    private int currentLevelIndex = 0;
-    private int currentDrinksServed = 0;
-    private float currentTimeRemaining = 0f;
-
-    private readonly List<GameObject> activeHumans = new List<GameObject>();
-    private Coroutine spawnRoutine;
-    private Coroutine timerRoutine;
-    private bool levelActive = false;
-
-    // Events
-    public delegate void LevelEvent(int levelIndex);
-    public static event LevelEvent OnLevelStart;
-    public static event LevelEvent OnLevelComplete;
-    public static event LevelEvent OnLevelFailed;
-    public static event LevelEvent OnRunReset;
-
-    private void Start()
+    public void SpawnEnemy(string enemyId, int spawnIndex)
     {
-        StartLevel(0);
-    }
-
-    public void StartLevel(int index)
-    {
-        if (index < 0 || index >= levels.Count)
+        if (spawnPoints == null || spawnPoints.Length == 0)
         {
-            levelActive = false;
+            Debug.LogError("No spawn points assigned!");
             return;
         }
 
-        StopSpawning();
-        ClearActiveHumans();
+        spawnIndex = Mathf.Clamp(spawnIndex, 0, spawnPoints.Length - 1);
+        Vector3 spawnPos = spawnPoints[spawnIndex].position;
 
-        currentLevelIndex = index;
-        LevelConfig config = levels[index];
-        currentDrinksServed = 0;
-        currentTimeRemaining = config.timeLimit;
-        levelActive = true;
+        GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
 
-        OnLevelStart?.Invoke(currentLevelIndex);
-        spawnRoutine = StartCoroutine(SpawnRoutine(config));
-
-        if (!config.isUnlimitedTime)
-            timerRoutine = StartCoroutine(TimerRoutine(config));
-    }
-
-    // --- Spawning Logic ---
-
-    //// Note: Ensure LevelData exists in your project with these fields
-    //public void SpawnLevel(LevelData levelData)
-    //{
-    //    StartCoroutine(SpawnOverTime("enemy_small", levelData.smallCount));
-    //    StartCoroutine(SpawnOverTime("enemy_medium_shotgun", levelData.mediumCount));
-    //    StartCoroutine(SpawnOverTime("enemy_medium_bomber", levelData.bomberCount));
-    //    StartCoroutine(SpawnOverTime("enemy_large", levelData.largeCount));
-    //    StartCoroutine(SpawnOverTime("boss_bartender", levelData.bossCount));
-    //}
-    public void SpawnLevel(List<string> enemyIDsToSpawn)
-    {
-        foreach (string id in enemyIDsToSpawn)
+        EnemyController controller = enemyObj.GetComponent<EnemyController>();
+        if (controller != null)
         {
-            // Now only passes the ID string
-            StartCoroutine(SpawnOverTime(id));
-        }
-    }
-
-    public void SpawnEnemyByID(string enemyID)
-    {
-        StartCoroutine(SpawnOverTime(enemyID));
-    }
-
-    IEnumerator SpawnOverTime(string enemyID)
-    {
-    
-        if (!EnemyManager.enemyDatabase.TryGetValue(enemyID, out EnemyData data))
-        {
-            Debug.LogError($"Cannot spawn {enemyID}: Not found in database!");
-            yield break;
+            controller.manager = Object.FindFirstObjectByType<EnemyManager>();
+            controller.Setup(enemyId);
         }
 
+        Object.FindFirstObjectByType<EnemyManager>().RegisterEnemy(enemyObj);
 
-        int countToSpawn = data.spawnCount;
-
-        for (int i = 0; i < countToSpawn; i++)
-        {
-            Transform spawn = defaultSpawnPoints[Random.Range(0, defaultSpawnPoints.Length)];
-            GameObject enemy = Instantiate(enemyPrefab, spawn.position, Quaternion.identity);
-
-            var controller = enemy.GetComponent<EnemyController>();
-            if (controller != null)
-            {
-                controller.Setup(enemyID);
-            }
-
-            yield return new WaitForSeconds(Random.Range(0.5f, 1.0f));
-        }
+        Debug.Log("Spawning enemy: " + enemyId + " at " + spawnPoints[spawnIndex].name);
     }
 
-    public void SpawnHuman(LevelConfig config)
-    {
-        if (config == null) return;
 
-        // Check if the prefab exists
-        if (config.humanPrefab == null)
+    public IEnumerator SpawnWave(LevelData level)
+    {
+        int spawnIndex = 0;
+
+        for (int i = 0; i < level.smallCount; i++)
         {
-            Debug.LogError($"SpawnHuman: Missing prefab in config: {config.levelName}");
-            return;
+            SpawnEnemy("enemy_small", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
         }
 
-        // Determine spawn point
-        Transform[] points = (config.spawnPoints != null && config.spawnPoints.Length > 0) ? config.spawnPoints : defaultSpawnPoints;
-        Transform spawnPoint = points[Random.Range(0, points.Length)];
-
-        // Fixed: Correct Instantiate syntax (Object, Position, Rotation)
-        GameObject human = Instantiate(config.humanPrefab, spawnPoint.position, Quaternion.identity);
-        activeHumans.Add(human);
-    }
-
-    private IEnumerator SpawnRoutine(LevelConfig config)
-    {
-        while (levelActive)
+        for (int i = 0; i < level.mediumCount; i++)
         {
-            if (activeHumans.Count < maxActiveHumans) SpawnHuman(config);
-            yield return new WaitForSeconds(config.spawnInterval);
-        }
-    }
-
-    //private void SpawnHuman(LevelConfig config)
-    //{
-    //    Transform[] points = (config.spawnPoints != null && config.spawnPoints.Length > 0) ? config.spawnPoints : defaultSpawnPoints;
-    //    GameObject prefab = config.humanPrefabs[Random.Range(0, config.humanPrefabs.Length)];
-    //    GameObject human = Instantiate(prefab, points[Random.Range(0, points.Length)].position, Quaternion.identity);
-    //    activeHumans.Add(human);
-    //}
-
-
-    // --- Timer and Fail Logic ---
-
-    private IEnumerator TimerRoutine(LevelConfig config)
-    {
-        while (currentTimeRemaining > 0f && levelActive)
-        {
-            currentTimeRemaining -= Time.deltaTime;
-            yield return null;
+            SpawnEnemy("enemy_medium", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
         }
 
-        if (levelActive && currentDrinksServed < config.quota)
+        for (int i = 0; i < level.bomberCount; i++)
         {
-            FailLevel();
+            SpawnEnemy("enemy_medium_bomber", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
         }
-    }
 
-    private void FailLevel()
-    {
-        levelActive = false;
-        StopSpawning();
-        OnLevelFailed?.Invoke(currentLevelIndex);
-        OnRunReset?.Invoke(currentLevelIndex);
-        StartLevel(0);
-    }
+        for (int i = 0; i < level.largeCount; i++)
+        {
+            SpawnEnemy("enemy_large", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
+        }
 
-    private void StopSpawning()
-    {
-        if (spawnRoutine != null) StopCoroutine(spawnRoutine);
-        if (timerRoutine != null) StopCoroutine(timerRoutine);
-    }
-
-    private void ClearActiveHumans()
-    {
-        foreach (var h in activeHumans) if (h != null) Destroy(h);
-        activeHumans.Clear();
+        for (int i = 0; i < level.bossCount; i++)
+        {
+            SpawnEnemy("boss_bartender", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(2f); 
+        }
     }
 }
-

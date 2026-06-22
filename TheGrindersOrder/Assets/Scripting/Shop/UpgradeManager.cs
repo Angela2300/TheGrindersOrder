@@ -6,7 +6,7 @@ public class UpgradeManager : MonoBehaviour
 
     private void Awake()
     {
-        playerStats = FindObjectOfType<PlayerStats>();
+        playerStats = Object.FindFirstObjectByType<PlayerStats>();
     }
 
     private void OnEnable()

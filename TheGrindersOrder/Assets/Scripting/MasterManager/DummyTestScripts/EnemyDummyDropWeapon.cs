@@ -8,7 +8,23 @@ public class EnemyDummyDropWeapon : MonoBehaviour
     public float maxHealth = 100f;
 
     // Current health during gameplay
-    private float currentHealth;
+    public float currentHealth;
+
+    // Public property to safely access currentHealth from other scripts
+    public float CurrentHealth
+    {
+        get { return currentHealth; }
+        set
+        {
+            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+
+            // Update the health bar whenever health changes
+            if (healthSlider != null)
+            {
+                healthSlider.value = currentHealth;
+            }
+        }
+    }
 
     // Health bar slider shown above the enemy
     [Header("UI")]
@@ -30,7 +46,7 @@ public class EnemyDummyDropWeapon : MonoBehaviour
     //{
     //    // Start with full health
     //    currentHealth = maxHealth;
-
+    //
     //    // Set up the health bar values
     //    if (healthSlider != null)
     //    {
@@ -43,12 +59,15 @@ public class EnemyDummyDropWeapon : MonoBehaviour
     {
         try
         {
-            currentHealth = maxHealth;
+            // Start with full health
+            CurrentHealth = maxHealth;
+
+            // Set up the health bar values
             if (healthSlider != null)
             {
                 healthSlider.maxValue = maxHealth;
-                healthSlider.value = currentHealth;
             }
+
             Debug.Log("Dummy script initialized successfully.");
         }
         catch (System.Exception e)
@@ -61,19 +80,10 @@ public class EnemyDummyDropWeapon : MonoBehaviour
     public void TakeDamage(float damage)
     {
         // Reduce health
-        currentHealth -= damage;
-
-        // Prevent health from going below zero
-        currentHealth = Mathf.Max(currentHealth, 0);
-
-        // Update the health bar
-        if (healthSlider != null)
-        {
-            healthSlider.value = currentHealth;
-        }
+        CurrentHealth -= damage;
 
         // If health reaches zero, kill the enemy
-        if (currentHealth <= 0)
+        if (CurrentHealth <= 0)
         {
             Die();
         }
@@ -116,6 +126,13 @@ public class EnemyDummyDropWeapon : MonoBehaviour
                 transform.position + new Vector3(-0.3f, 0f, 0f),
                 Quaternion.identity
             );
+        }
+
+        // Notify EnemyController + LevelManager before destroying
+        var controller = GetComponent<EnemyController>();
+        if (controller != null)
+        {
+            controller.Die();
         }
 
         // Remove the enemy from the scene
