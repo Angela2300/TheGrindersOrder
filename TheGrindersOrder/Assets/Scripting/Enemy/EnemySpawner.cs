@@ -3,8 +3,7 @@ using System.Collections;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
-    public Transform[] spawnPoints;
+    public Transform[] spawnPoints; // drag spawn point objects here in Inspector
 
     public void SpawnEnemy(string enemyId, int spawnIndex)
     {
@@ -17,7 +16,14 @@ public class EnemySpawner : MonoBehaviour
         spawnIndex = Mathf.Clamp(spawnIndex, 0, spawnPoints.Length - 1);
         Vector3 spawnPos = spawnPoints[spawnIndex].position;
 
-        GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+        GameObject prefab = EnemyManager.GetPrefabForEnemy(enemyId);
+        if (prefab == null)
+        {
+            Debug.LogWarning("No prefab found for enemy ID: " + enemyId);
+            return;
+        }
+
+        GameObject enemyObj = Instantiate(prefab, spawnPos, Quaternion.identity);
 
         EnemyController controller = enemyObj.GetComponent<EnemyController>();
         if (controller != null)
@@ -26,11 +32,14 @@ public class EnemySpawner : MonoBehaviour
             controller.Setup(enemyId);
         }
 
+        // Register with EnemyManager
         Object.FindFirstObjectByType<EnemyManager>().RegisterEnemy(enemyObj);
+
+        // Register with LevelManager so timer/customers logic works
+        Object.FindFirstObjectByType<LevelManager>().RegisterEnemy(enemyObj);
 
         Debug.Log("Spawning enemy: " + enemyId + " at " + spawnPoints[spawnIndex].name);
     }
-
 
     public IEnumerator SpawnWave(LevelData level)
     {
@@ -44,7 +53,7 @@ public class EnemySpawner : MonoBehaviour
 
         for (int i = 0; i < level.mediumCount; i++)
         {
-            SpawnEnemy("enemy_medium", spawnIndex++ % spawnPoints.Length);
+            SpawnEnemy("enemy_medium_shotgun", spawnIndex++ % spawnPoints.Length);
             yield return new WaitForSeconds(1f);
         }
 
@@ -63,7 +72,9 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < level.bossCount; i++)
         {
             SpawnEnemy("boss_bartender", spawnIndex++ % spawnPoints.Length);
-            yield return new WaitForSeconds(2f); 
+            yield return new WaitForSeconds(2f);
         }
     }
 }
+
+

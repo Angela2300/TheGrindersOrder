@@ -90,7 +90,11 @@ public class EnemyController : MonoBehaviour
     {
         if (distance > 2f) return;
         var playerStats = player.GetComponent<PlayerStats>();
-        if (playerStats != null) playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts));
+        if (playerStats != null)
+        {
+            playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts));
+            Debug.Log($"{stats.displayName} dealt {stats.damageHearts} damage (close attack).");
+        }
     }
 
     private void PerformShortAttack(float distance)
@@ -103,7 +107,11 @@ public class EnemyController : MonoBehaviour
     {
         if (distance > 2.5f) return;
         var playerStats = player.GetComponent<PlayerStats>();
-        if (playerStats != null) playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts * 2));
+        if (playerStats != null)
+        {
+            playerStats.TakeDamage(Mathf.RoundToInt(stats.damageHearts * 2));
+            Debug.Log($"{stats.displayName} dealt {stats.damageHearts * 2} damage (explosion attack).");
+        }
     }
 
     private void PerformLargeAttack(float distance)

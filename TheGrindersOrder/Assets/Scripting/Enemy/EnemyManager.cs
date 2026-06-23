@@ -6,8 +6,18 @@ public class EnemyManager : MonoBehaviour
 {
     public static Dictionary<string, EnemyData> enemyDatabase = new Dictionary<string, EnemyData>();
 
+    // Prefab references (drag in Inspector)
+    public GameObject smallPrefab;
+    public GameObject mediumShotgunPrefab;
+    public GameObject mediumBomberPrefab;
+    public GameObject largePrefab;
+    public GameObject bossPrefab;
+
+    private static EnemyManager instance;
+
     private void Awake()
     {
+        instance = this;
         LoadEnemyDatabase();
     }
 
@@ -68,6 +78,22 @@ public class EnemyManager : MonoBehaviour
         if (controller != null)
         {
             controller.manager = this;
+        }
+    }
+
+
+    public static GameObject GetPrefabForEnemy(string enemyID)
+    {
+        if (instance == null) return null;
+
+        switch (enemyID)
+        {
+            case "enemy_small": return instance.smallPrefab;
+            case "enemy_medium_shotgun": return instance.mediumShotgunPrefab;
+            case "enemy_medium_bomber": return instance.mediumBomberPrefab;
+            case "enemy_large": return instance.largePrefab;
+            case "boss_bartender": return instance.bossPrefab;
+            default: return null;
         }
     }
 }
