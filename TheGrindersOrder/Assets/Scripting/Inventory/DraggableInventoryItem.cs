@@ -1,105 +1,77 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DraggableInventoryItem : MonoBehaviour,
-    IBeginDragHandler,
-    IDragHandler,
-    IEndDragHandler
+public class DraggableInventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    // Stores where the item originally was before dragging
-    Vector3 startPosition;
+    [Header("Item Identity")]
+    [Tooltip("Which inventory slot this UI element represents. Meat is always 0.")]
+    [SerializeField] private int slotIndex = 0;
 
-    // Stores the original parent object (inventory slot)
-    Transform startParent;
+    public int SlotIndex => slotIndex;
 
-    // Reference to the sell area in the shop UI
-    // Drag the ShopSellPanel RectTransform into this in the Inspector
-    public RectTransform shopSellArea;
+    [Header("Drag Settings")]
+    [SerializeField] private CanvasGroup canvasGroup; // Used to fade the icon and let raycasts pass through while dragging
 
-    // Called once when the player starts dragging the item
+    private RectTransform rectTransform;
+    private Canvas parentCanvas;
+    private Vector2 originalAnchoredPosition;
+    private Transform originalParent;
+
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+        parentCanvas = GetComponentInParent<Canvas>();
+
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
+
+        if (rectTransform == null)
+            Debug.LogWarning($"[DraggableInventoryItem] No RectTransform found on {gameObject.name}.");
+
+        if (parentCanvas == null)
+            Debug.LogWarning($"[DraggableInventoryItem] No parent Canvas found for {gameObject.name}. Dragging may not work correctly.");
+
+        if (canvasGroup == null)
+            Debug.LogWarning($"[DraggableInventoryItem] No CanvasGroup found on {gameObject.name}. Add one so raycasts pass through while dragging.");
+    }
+
     public void OnBeginDrag(PointerEventData eventData)
     {
-        // Remember where the item started
-        startPosition = transform.position;
+        if (rectTransform == null) return;
 
-        // Remember which slot the item belongs to
-        startParent = transform.parent;
+        originalAnchoredPosition = rectTransform.anchoredPosition;
+        originalParent = transform.parent;
+
+        // Move to the top of the canvas hierarchy so it renders above other UI while dragging
+        if (parentCanvas != null)
+            transform.SetParent(parentCanvas.transform, true);
+
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0.6f;
+            canvasGroup.blocksRaycasts = false; // lets OnDrop on SellDropZone fire correctly
+        }
     }
 
-    // Called continuously while dragging
     public void OnDrag(PointerEventData eventData)
     {
-        // Move the item with the mouse
-        transform.position = eventData.position;
+        if (rectTransform == null || parentCanvas == null) return;
+
+        // Move with the pointer, scaled correctly for the canvas's render mode
+        rectTransform.anchoredPosition += eventData.delta / parentCanvas.scaleFactor;
     }
 
-    // Called when the player releases the mouse button
     public void OnEndDrag(PointerEventData eventData)
     {
-        // Check if the item was dropped inside the shop sell area
-        if (shopSellArea != null &&
-            RectTransformUtility.RectangleContainsScreenPoint(
-                shopSellArea,
-                eventData.position))
+        transform.SetParent(originalParent, true);
+
+        if (rectTransform != null)
+            rectTransform.anchoredPosition = originalAnchoredPosition;
+
+        if (canvasGroup != null)
         {
-            Inventory inventory = startParent.GetComponentInParent<Inventory>();
-            PlayerStats playerStats = inventory.GetComponent<PlayerStats>();
-
-            if (inventory == null || playerStats == null)
-            {
-                Debug.LogWarning("Missing Inventory or PlayerStats.");
-                return;
-            }
-
-            int slotIndex = startParent.GetSiblingIndex();
-
-            if (slotIndex < 0 || slotIndex >= inventory.maxSlots)
-            {
-                Debug.LogWarning("Invalid inventory slot.");
-                return;
-            }
-
-            InventorySlotType slotType = inventory.slotTypes[slotIndex];
-
-            if (slotType == InventorySlotType.Meat)
-            {
-                if (inventory.meatCount > 0)
-                {
-                    inventory.meatCount--;
-                    playerStats.AddCoins(5);
-                    Debug.Log("Sold 1 meat for 5 coins.");
-                }
-            }
-            else if (slotType == InventorySlotType.Weapon)
-            {
-                inventory.slotUsed[slotIndex] = false;
-                inventory.slotTypes[slotIndex] = InventorySlotType.Empty;
-                inventory.weapons[slotIndex] = default;
-
-                playerStats.AddCoins(20);
-                Debug.Log("Sold weapon for 20 coins.");
-            }
-
-            if (inventory.inventoryUI != null)
-            {
-                inventory.inventoryUI.UpdateInventory(
-                    inventory.weapons,
-                    inventory.slotUsed,
-                    inventory.slotTypes,
-                    inventory.meatCount
-                );
-            }
-
-            Debug.Log("Sell item here");
-        }
-        else
-        {
-            // If not dropped on the sell area,
-            // return the item back to its original slot
-            transform.position = startPosition;
-
-            // Restore original parent slot
-            transform.SetParent(startParent);
+            canvasGroup.alpha = 1f;
+            canvasGroup.blocksRaycasts = true;
         }
     }
 }

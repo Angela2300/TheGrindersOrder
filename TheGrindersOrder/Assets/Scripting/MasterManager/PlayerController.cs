@@ -12,10 +12,12 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
+    private PlayerStats playerStats;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerStats = GetComponent<PlayerStats>();
     }
 
     void Update()
@@ -26,7 +28,14 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.MovePosition(rb.position + moveInput * moveSpeed * Time.fixedDeltaTime);
+        float finalSpeed = moveSpeed;
+
+        if (playerStats != null)
+        {
+            finalSpeed *= playerStats.speedMultiplier;
+        }
+
+        rb.MovePosition(rb.position + moveInput * finalSpeed * Time.fixedDeltaTime);
     }
 
     void ReadMovementInput()
