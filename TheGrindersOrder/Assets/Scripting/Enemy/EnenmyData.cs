@@ -7,9 +7,11 @@ public class EnemyData
     public string role;
     public string attackType;
 
+
     // Combat Stats
     public float damageHearts;
     public int damageLives;
+    public float attackRange;
     public int health;
 
     // Movement & Behavior

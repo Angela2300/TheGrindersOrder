@@ -199,32 +199,81 @@ public class PlayerStats : MonoBehaviour
         RefreshUI();
     }
 
+    //public void TakeDamage(int damage)
+    //{
+    //    Debug.Log($"Taking {damage} damage. Current Shields: {shields}, Hearts: {hearts}");
+
+    //    if (shields > 0)
+    //    {
+    //        for (int i = 0; i < damage; i++)
+    //        {
+    //            bool armorBlocked = Random.value < armorReduction;
+
+    //            if (armorBlocked)
+    //            {
+    //                Debug.Log("Armor blocked shield damage.");
+    //                continue;
+    //            }
+
+    //            shields--;
+    //            Debug.Log($"Shield damaged! Remaining: {shields}");
+    //            if (shields <= 0)
+    //                break;
+    //        }
+
+    //        RefreshUI();
+    //        return;
+    //    }
+
+    //    hearts -= damage;
+
+    //    if (hearts <= 0)
+    //    {
+    //        hearts = 0;
+    //        GameOver();
+    //    }
+
+    //    RefreshUI();
+    //}
+
     public void TakeDamage(int damage)
     {
+        Debug.Log($"Taking {damage} damage. Current Shields: {shields}, Hearts: {hearts}");
+
+        int remainingDamage = damage;
+
+        // 1. Process damage against Shields
         if (shields > 0)
         {
             for (int i = 0; i < damage; i++)
             {
+                if (remainingDamage <= 0) break; // No more damage to process
+
                 bool armorBlocked = Random.value < armorReduction;
 
                 if (armorBlocked)
                 {
                     Debug.Log("Armor blocked shield damage.");
+                    remainingDamage--; // Even if blocked, it consumes the attack's 'hit'
                     continue;
                 }
 
                 shields--;
+                remainingDamage--;
+                Debug.Log($"Shield damaged! Remaining: {shields}");
 
-                if (shields <= 0)
-                    break;
+                if (shields <= 0) break;
             }
-
-            RefreshUI();
-            return;
         }
 
-        hearts -= damage;
+        // 2. Process remaining damage against Hearts
+        if (remainingDamage > 0)
+        {
+            hearts -= remainingDamage;
+            Debug.Log($"Hearts damaged! Remaining: {hearts}");
+        }
 
+        // 3. Final Checks
         if (hearts <= 0)
         {
             hearts = 0;
