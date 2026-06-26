@@ -2,10 +2,10 @@ using UnityEngine;
 
 public enum WeaponType
 {
-    Pistol,   // 10 dmg
-    SMG,      // 5 dmg
-    Shotgun,  // 15 dmg
-    Launcher  // 30 dmg
+    Pistol,
+    SMG,
+    Shotgun,
+    Launcher
 }
 
 public class WeaponSystem : MonoBehaviour
@@ -30,6 +30,8 @@ public class WeaponSystem : MonoBehaviour
     bool isReloading;
     float lastShotTime;
 
+    private PlayerStats playerStats;
+
     public float CurrentDamage => currentDamage;
     public int CurrentAmmo => currentAmmo;
     public int MaxAmmo => maxAmmo;
@@ -44,21 +46,24 @@ public class WeaponSystem : MonoBehaviour
     public Transform weaponHolder;
     GameObject currentWeaponVisual;
 
-    public void ManualReload()
-    {
-        if (currentAmmo < maxAmmo && !isReloading)
-            StartReload();
-    }
-
     void Start()
     {
+        playerStats = GetComponentInParent<PlayerStats>();
+
         ApplyWeaponStats(currentWeapon);
         UpdatePlayerVisual();
     }
 
     public void Initialize()
     {
+        playerStats = GetComponentInParent<PlayerStats>();
         ApplyWeaponStats(currentWeapon);
+    }
+
+    public void ManualReload()
+    {
+        if (currentAmmo < maxAmmo && !isReloading)
+            StartReload();
     }
 
     public void SetWeapon(WeaponType weaponType)
@@ -99,14 +104,10 @@ public class WeaponSystem : MonoBehaviour
             }
         }
 
-        // Fix self-assignment warning
         switch (weaponType)
         {
             case WeaponType.Launcher:
                 bulletPrefab = launcherBulletPrefab;
-                break;
-            default:
-                // Keep the existing bulletPrefab (no redundant assignment)
                 break;
         }
 
@@ -129,12 +130,14 @@ public class WeaponSystem : MonoBehaviour
         currentAmmo--;
         lastShotTime = Time.time;
 
-        if (currentAmmo <= 0) StartReload();
+        if (currentAmmo <= 0)
+            StartReload();
     }
 
     void UpdatePlayerVisual()
     {
-        if (currentWeaponVisual != null) Destroy(currentWeaponVisual);
+        if (currentWeaponVisual != null)
+            Destroy(currentWeaponVisual);
 
         GameObject prefabToSpawn = currentWeapon switch
         {
@@ -147,7 +150,12 @@ public class WeaponSystem : MonoBehaviour
 
         if (prefabToSpawn != null)
         {
-            currentWeaponVisual = Instantiate(prefabToSpawn, weaponHolder.position, weaponHolder.rotation, weaponHolder);
+            currentWeaponVisual = Instantiate(
+                prefabToSpawn,
+                weaponHolder.position,
+                weaponHolder.rotation,
+                weaponHolder
+            );
         }
     }
 
@@ -155,20 +163,48 @@ public class WeaponSystem : MonoBehaviour
     {
         switch (currentWeapon)
         {
-            case WeaponType.Pistol: FireSingle(); break;
-            case WeaponType.SMG: FireSpread(1, 8f, true); break;
-            case WeaponType.Shotgun: FireSpread(5, 30f, false); break;
-            case WeaponType.Launcher: FireLauncher(); break;
+            case WeaponType.Pistol:
+                FireSingle();
+                break;
+
+            case WeaponType.SMG:
+                FireSpread(1, 8f, true);
+                break;
+
+            case WeaponType.Shotgun:
+                FireSpread(5, 30f, false);
+                break;
+
+            case WeaponType.Launcher:
+                FireLauncher();
+                break;
         }
+    }
+
+    float GetFinalDamage()
+    {
+        if (playerStats == null)
+            playerStats = GetComponentInParent<PlayerStats>();
+
+        if (playerStats == null)
+            return currentDamage;
+
+        return currentDamage * playerStats.weaponDamageMultiplier;
     }
 
     void FireSingle()
     {
-        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bulletObject = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            firePoint.rotation
+        );
+
         Bullet bullet = bulletObject.GetComponent<Bullet>();
+
         if (bullet != null)
         {
-            bullet.damage = currentDamage;
+            bullet.damage = GetFinalDamage();
             bullet.speed = 20f;
             bullet.lifeTime = 1.8f;
             bullet.hitEffectDestroyTime = 0.2f;
@@ -183,13 +219,20 @@ public class WeaponSystem : MonoBehaviour
                 ? Random.Range(-spreadAngle, spreadAngle)
                 : Mathf.Lerp(-spreadAngle, spreadAngle, i / (float)(bulletCount - 1));
 
-            Quaternion spreadRotation = firePoint.rotation * Quaternion.Euler(0, 0, angleOffset);
-            GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, spreadRotation);
+            Quaternion spreadRotation =
+                firePoint.rotation * Quaternion.Euler(0, 0, angleOffset);
+
+            GameObject bulletObject = Instantiate(
+                bulletPrefab,
+                firePoint.position,
+                spreadRotation
+            );
 
             Bullet bullet = bulletObject.GetComponent<Bullet>();
+
             if (bullet != null)
             {
-                bullet.damage = currentDamage;
+                bullet.damage = GetFinalDamage();
                 bullet.speed = 16f;
                 bullet.lifeTime = 1.2f;
                 bullet.hitEffectDestroyTime = 0.25f;
@@ -199,11 +242,17 @@ public class WeaponSystem : MonoBehaviour
 
     void FireLauncher()
     {
-        GameObject bulletObject = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bulletObject = Instantiate(
+            bulletPrefab,
+            firePoint.position,
+            firePoint.rotation
+        );
+
         Bullet bullet = bulletObject.GetComponent<Bullet>();
+
         if (bullet != null)
         {
-            bullet.damage = currentDamage;
+            bullet.damage = GetFinalDamage();
             bullet.speed = 12f;
             bullet.lifeTime = 2.5f;
             bullet.hitEffectDestroyTime = 0.35f;
