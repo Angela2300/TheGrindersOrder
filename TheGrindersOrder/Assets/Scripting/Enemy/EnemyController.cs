@@ -1,16 +1,18 @@
 using UnityEngine;
-using System.Collections; // Required for Coroutines
+using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
     public string enemyID;
     public float attackCooldown = 1.5f;
     public EnemyManager manager;
+
+    // This is your main data source, as referenced in your Setup() method
     public EnemyData stats;
 
     private float attackTimer;
     private Transform player;
-    private bool isAttacking = false; // Prevents overlapping attacks
+    private bool isAttacking = false;
 
     public GameObject bulletPrefab;
 
@@ -34,7 +36,6 @@ public class EnemyController : MonoBehaviour
     {
         if (stats == null) return;
 
-        // Only move if NOT currently in the middle of an attack animation
         if (!isAttacking && stats.followsPlayer && player != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, player.position, stats.moveSpeedValue * Time.deltaTime);
@@ -42,7 +43,6 @@ public class EnemyController : MonoBehaviour
 
         attackTimer += Time.deltaTime;
 
-        // Only trigger attack if we are within range and cooldown is finished
         if (!isAttacking && attackTimer >= attackCooldown)
         {
             if (player != null && Vector3.Distance(transform.position, player.position) <= stats.attackRange)
@@ -55,12 +55,8 @@ public class EnemyController : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
-
-        // 1. TELEGRAPH PHASE: Pause here to create a "wind-up" feeling
-        // Change the 0.7f to a higher number to make the enemy feel slower/heavier
         yield return new WaitForSeconds(0.7f);
 
-        // 2. STRIKE PHASE: Execute the damage logic
         if (player != null && Vector3.Distance(transform.position, player.position) <= stats.attackRange)
         {
             if (bulletPrefab != null) FireBullet();
@@ -74,7 +70,6 @@ public class EnemyController : MonoBehaviour
             }
         }
 
-        // 3. RECOVERY PHASE
         attackTimer = 0f;
         isAttacking = false;
     }
