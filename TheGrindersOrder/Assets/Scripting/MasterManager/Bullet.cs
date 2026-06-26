@@ -29,19 +29,22 @@ public class Bullet : MonoBehaviour
         transform.Translate(Vector2.up * speed * Time.deltaTime);
     }
 
+
     void OnTriggerEnter2D(Collider2D other)
     {
+        // 1. Define what you WANT to interact with
+        bool isEnemy = other.CompareTag("Enemy");
+        bool isWall = other.CompareTag("Wall");
+      
+
+        // 2. Ignore everything that isn't an enemy or wall
+        if (!isEnemy && !isWall)
+        {
+            return;
+        }
         Debug.Log("Launcher bullet hit: " + other.name);
 
-        // Do not hit the player
-        if (other.CompareTag("Player"))
-            return;
-
-        // Only react to enemies or walls
-        if (!other.CompareTag("Enemy") && !other.CompareTag("Wall"))
-            return;
-
-        // Spawn hit VFX
+        // 4. Proceed with your existing logic...
         if (hitEffect != null)
         {
             GameObject effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
@@ -54,7 +57,6 @@ public class Bullet : MonoBehaviour
         }
         else
         {
-            // Single-target damage
             TryDamageTarget(other);
         }
 
