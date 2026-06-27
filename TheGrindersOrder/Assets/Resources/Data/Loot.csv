@@ -1,0 +1,17 @@
+id,enemy_type,resource_type,min_amount,max_amount,drop_chance
+1,farmer,loot_meat,1,2,1.0
+2,farmer,loot_coin,0,1,0.3
+3,farmer,loot_medkit,1,1,0.05
+4,townsperson,loot_meat,1,2,1.0
+5,townsperson,loot_coin,0,1,0.2
+6,townsperson,loot_medkit,1,1,0.08
+7,bomber,loot_meat,2,3,1.0
+8,bomber,loot_coin,1,2,0.4
+9,bomber,loot_medkit,1,1,0.03
+10,knight,loot_meat,3,4,1.0
+11,knight,loot_coin,2,3,0.5
+12,knight,loot_medkit,1,1,0.1
+13,marlow_boss,loot_meat,10,10,1.0
+14,marlow_boss,loot_coin,20,20,1.0
+15,marlow_boss,loot_medkit,1,1,1.0
+16,marlow_boss,quest_boss_item,1,1,1.0
