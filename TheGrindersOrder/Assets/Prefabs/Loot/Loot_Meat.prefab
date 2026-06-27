@@ -169,5 +169,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a51e5b863ab4044bfe59f8f7c98935, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LootItem
-  resourceType: loot_coin
+  resourceType: loot_meat
   amount: 1

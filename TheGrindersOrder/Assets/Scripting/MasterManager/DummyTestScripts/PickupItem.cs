@@ -77,20 +77,25 @@ public class PickupItem : MonoBehaviour
             // ========================
             case PickupType.Meat:
 
-                // Make sure the player has an inventory
                 if (inventory != null)
                 {
-                    // Try adding meat into the inventory
                     bool added = inventory.AddMeat();
 
-                    // If successful, remove the meat object from the world
                     if (added)
+                    {
+                        if (LevelManager.Instance != null)
+                        {
+                            LevelManager.Instance.RegisterMeatCollected(amount);
+                            Debug.Log("[PickupItem] Meat collected, notified LevelManager");
+                        }
+
                         Destroy(gameObject);
+                    }
                 }
 
                 break;
+            }
         }
-    }
 
 
 

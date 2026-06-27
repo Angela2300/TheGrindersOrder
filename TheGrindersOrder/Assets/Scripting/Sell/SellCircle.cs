@@ -100,6 +100,8 @@ public class SellCircle : MonoBehaviour
 
         ShowFeedback($"Sold {meatCount} meat for {coinsEarned} coins.");
 
+        LevelManager.OnMeatSold(meatCount);
+
         if (debugLogs)
             Debug.Log($"[SellCircle] Sold {meatCount} meat for {coinsEarned} coins.");
     }

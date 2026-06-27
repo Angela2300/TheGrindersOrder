@@ -28,6 +28,7 @@ public class LootItem : MonoBehaviour
         }
 
         inventory.AddItem(resourceType, amount);
+
         Destroy(gameObject);
     }
 }

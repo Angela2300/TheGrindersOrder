@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; // for TMP_Text
+using TMPro;
 
 public class LevelManager : MonoBehaviour
 {
@@ -11,15 +11,20 @@ public class LevelManager : MonoBehaviour
 
     public List<GameObject> activeEnemies = new List<GameObject>();
 
-    // HUD references — drag TMP text objects here in Inspector
     public TMP_Text timerText;
     public TMP_Text levelText;
     public TMP_Text customersText;
+    public TMP_Text meatinventorytext;
 
     private LevelData currentLevel;
 
-    //  Single counter for customers served
+    public GameObject Youdied;
+    public GameObject RanOutOfTimeCanvas;
+    public GameObject MoveOnNextLevelCanvas;
+    public GameObject YouWonCanvas;
+
     private int customersServed = 0;
+    private int meatCollected;
 
     private void Awake()
     {
@@ -28,14 +33,20 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel(LevelData level)
     {
+
+        foreach (var enemy in activeEnemies)
+        {
+            if (enemy != null)
+                Destroy(enemy);
+        }
+        activeEnemies.Clear();
+
         currentLevel = level;
         isLevelActive = true;
         roundTimer = level.timeLimit;
 
-        //  Reset counter at start of each level
         customersServed = 0;
 
-        Debug.Log($"Starting Level {level.levelID} | Small:{level.smallCount}, Medium:{level.mediumCount}, Bomber:{level.bomberCount}, Large:{level.largeCount}, Boss:{level.bossCount}, Time:{level.timeLimit}");
 
         EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
         if (spawner != null)
@@ -44,7 +55,6 @@ public class LevelManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError("EnemySpawner not found in scene!");
             SpawnEnemies(level);
         }
 
@@ -55,31 +65,93 @@ public class LevelManager : MonoBehaviour
     {
         if (!isLevelActive) return;
 
-        // Timer countdown
         if (roundTimer > 0)
         {
             roundTimer -= Time.deltaTime;
             if (roundTimer <= 0f)
             {
-                EndRound();
+                RanOutOfTime();
             }
-        }
-
-        // Auto-advance if all enemies are cleared
-        if (activeEnemies.Count == 0 && isLevelActive)
-        {
-            EndRound();
         }
 
         UpdateHUD();
     }
 
-    private void EndRound()
+    // ---------------------------
+    // MEAT COLLECTION
+    // ---------------------------
+
+    public void RegisterMeatCollected(int amount = 1)
+    {
+        meatCollected += amount;
+        Debug.Log($"[LevelManager] Meat collected on pickup: +{amount}, total = {meatCollected}");
+        UpdateHUD();
+    }
+    public void ResetMeatCollected()
+    {
+        meatCollected = 0;
+        UpdateHUD();
+    }
+
+    // Static hook for SellCircle or Inventory to call
+    public static void OnMeatSold(int meatCount)
+    {
+        if (Instance != null)
+        {
+            Instance.AddCustomersServed(meatCount);
+            Instance.ResetMeatCollected();
+        }
+    }
+
+    public void AddCustomersServed(int amount)
+    {
+        customersServed += amount;
+        UpdateHUD();
+
+        if (customersServed >= currentLevel.customersToServe)
+        {
+            MoveOnNextLevel();
+        }
+    }
+
+    // ---------------------------
+    // CANVAS METHODS
+    // ---------------------------
+
+    private void MoveOnNextLevel()
     {
         isLevelActive = false;
-        Debug.Log("Round ended.");
-        // trigger next level or results here
+        if (MoveOnNextLevelCanvas != null)
+            MoveOnNextLevelCanvas.SetActive(true);
     }
+
+    private void RanOutOfTime()
+    {
+        isLevelActive = false;
+        if (RanOutOfTimeCanvas != null)
+            RanOutOfTimeCanvas.SetActive(true);
+
+        // Reset back to Level 1
+        StartLevel(LevelLoader.levels[0]);
+    }
+
+    private void YouWon()
+    {
+        isLevelActive = false;
+        if (YouWonCanvas != null)
+            YouWonCanvas.SetActive(true);
+    }
+
+    public void PlayerDied()
+    {
+        isLevelActive = false;
+        if (Youdied != null)
+            Youdied.SetActive(true);
+    }
+
+    // ---------------------------
+    // ENEMY SPAWNING
+    // ---------------------------
 
     private void SpawnEnemies(LevelData level)
     {
@@ -126,17 +198,36 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    //  Increment customers served when enemy is removed
     public void RegisterCustomerServed(GameObject enemy)
     {
         if (activeEnemies.Contains(enemy))
         {
             activeEnemies.Remove(enemy);
         }
-
-        customersServed++;
-        UpdateHUD();
+        // No customersServed++ here anymore
     }
+
+    // ---------------------------
+    // NEXT LEVEL BUTTON
+    // ---------------------------
+
+    public void LoadNextLevel()
+    {
+        int currentIndex = LevelLoader.levels.IndexOf(currentLevel);
+
+        if (currentIndex >= 0 && currentIndex < LevelLoader.levels.Count - 1)
+        {
+            StartLevel(LevelLoader.levels[currentIndex + 1]);
+        }
+        else
+        {
+            YouWon();
+        }
+    }
+
+    // ---------------------------
+    // HUD UPDATE
+    // ---------------------------
 
     private void UpdateHUD()
     {
@@ -148,5 +239,8 @@ public class LevelManager : MonoBehaviour
 
         if (customersText != null && currentLevel != null)
             customersText.text = $"Customers Served: {customersServed}/{currentLevel.customersToServe}";
+
+        if (meatinventorytext != null)
+            meatinventorytext.text = $"Meat Collected: {meatCollected}";
     }
 }
