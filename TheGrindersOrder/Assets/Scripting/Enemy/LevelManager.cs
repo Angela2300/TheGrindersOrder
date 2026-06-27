@@ -24,7 +24,7 @@ public class LevelManager : MonoBehaviour
     public GameObject YouWonCanvas;
 
     private int customersServed = 0;
-    private int meatCollected = 0;
+    private int meatCollected;
 
     private void Awake()
     {
@@ -33,7 +33,7 @@ public class LevelManager : MonoBehaviour
 
     public void StartLevel(LevelData level)
     {
-        //  Clear leftover enemies
+
         foreach (var enemy in activeEnemies)
         {
             if (enemy != null)
@@ -46,7 +46,7 @@ public class LevelManager : MonoBehaviour
         roundTimer = level.timeLimit;
 
         customersServed = 0;
-        //  Do not reset meatCollected here — it persists until sold
+
 
         EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
         if (spawner != null)
@@ -77,6 +77,28 @@ public class LevelManager : MonoBehaviour
         UpdateHUD();
     }
 
+    public void RestartLevel()
+    {
+        // Reset player stats
+        PlayerStats player = FindObjectOfType<PlayerStats>();
+        if (player != null)
+            player.ResetStats();
+
+        // Clear leftover enemies
+        foreach (var enemy in activeEnemies)
+        {
+            if (enemy != null)
+                Destroy(enemy);
+        }
+        activeEnemies.Clear();
+
+        // Reload current level
+        if (currentLevel != null)
+            StartLevel(currentLevel);
+        else
+            StartLevel(LevelLoader.levels[0]); // fallback to level 1
+    }
+
     // ---------------------------
     // MEAT COLLECTION
     // ---------------------------
@@ -84,16 +106,16 @@ public class LevelManager : MonoBehaviour
     public void RegisterMeatCollected(int amount = 1)
     {
         meatCollected += amount;
-        Debug.Log($"[LevelManager] Meat collected: +{amount}, total = {meatCollected}");
+        Debug.Log($"[LevelManager] Meat collected on pickup: +{amount}, total = {meatCollected}");
         UpdateHUD();
     }
-
     public void ResetMeatCollected()
     {
         meatCollected = 0;
         UpdateHUD();
     }
 
+    // Static hook for SellCircle or Inventory to call
     public static void OnMeatSold(int meatCount)
     {
         if (Instance != null)
@@ -123,7 +145,6 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (MoveOnNextLevelCanvas != null)
             MoveOnNextLevelCanvas.SetActive(true);
-        Time.timeScale = 0f; //pause
     }
 
     private void RanOutOfTime()
@@ -131,7 +152,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (RanOutOfTimeCanvas != null)
             RanOutOfTimeCanvas.SetActive(true);
-            Time.timeScale = 0f; //pause
+        // Restart is triggered by button, not automatically
     }
 
     private void YouWon()
@@ -139,7 +160,6 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (YouWonCanvas != null)
             YouWonCanvas.SetActive(true);
-        Time.timeScale = 0f; //pause
     }
 
     public void PlayerDied()
@@ -147,7 +167,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (Youdied != null)
             Youdied.SetActive(true);
-        Time.timeScale = 0f; //pause
+        // Restart is triggered by button, not automatically
     }
 
     // ---------------------------
@@ -183,7 +203,7 @@ public class LevelManager : MonoBehaviour
         enemy.GetComponent<EnemyController>().Setup(enemyID);
         RegisterEnemy(enemy);
 
-        Debug.Log("Spawned enemy: " + data.displayName + " (" + enemyID + ")");
+        Debug.Log("Spawned enemy (fallback): " + data.displayName + " (" + enemyID + ")");
     }
 
     private Vector3 GetSpawnPoint()
@@ -205,6 +225,7 @@ public class LevelManager : MonoBehaviour
         {
             activeEnemies.Remove(enemy);
         }
+        // No customersServed++ here anymore
     }
 
     // ---------------------------
@@ -224,7 +245,6 @@ public class LevelManager : MonoBehaviour
             YouWon();
         }
     }
-
 
     // ---------------------------
     // HUD UPDATE

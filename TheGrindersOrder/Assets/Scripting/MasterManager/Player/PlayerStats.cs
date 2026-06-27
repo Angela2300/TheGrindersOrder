@@ -348,4 +348,13 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
+    public void ResetStats()
+    {
+        hearts = maxHearts;   // restore full health
+        shields = 3;          // or whatever default you want
+        coins = 0;            // optional, reset coins if needed
+
+        RefreshUI();
+        Debug.Log("[PlayerStats] Stats reset on restart");
+    }
 }

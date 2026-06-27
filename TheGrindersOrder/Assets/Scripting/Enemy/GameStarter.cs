@@ -1,12 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameStarter : MonoBehaviour
 {
     private LevelManager lm;
     private int currentLevelIndex = 0;
-
-    [SerializeField] private string targetSceneName;
 
     void Start()
     {
@@ -38,20 +35,6 @@ public class GameStarter : MonoBehaviour
                 Debug.Log("All test levels completed!");
             }
         }
-
-    }
-
-    public void ResetChosenScene()
-    {
-        // Checks if you forgot to type a scene name
-        if (string.IsNullOrEmpty(targetSceneName))
-        {
-            Debug.LogError("Target scene name is empty! Please assign it in the Inspector.");
-            return;
-        }
-
-        // Reloads the designated scene from scratch
-        SceneManager.LoadScene(targetSceneName);
     }
 
     private void StartLevel(int index)
