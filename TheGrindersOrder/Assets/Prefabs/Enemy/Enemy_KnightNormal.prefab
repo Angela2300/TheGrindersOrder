@@ -413,7 +413,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   enemyID: enemy_large
-  attackCooldown: 1.5
   manager: {fileID: 0}
   stats:
     enemyID: 
@@ -433,7 +432,26 @@ MonoBehaviour:
     weaponId: 
     spawnCount: 0
     isBomber: 0
-  bulletPrefab: {fileID: 0}
+  attackCooldown: 1.5
+  isShotgunEnemy: 0
+  shotgunBulletPrefab: {fileID: 0}
+  shotgunBulletSpeed: 10
+  shotgunBulletSpawnOffset: 0.7
+  shotgunDamage: 2
+  shotgunRangeVFX: {fileID: 0}
+  isBomber: 0
+  bomberDamage: 3
+  bomberExplosionVFX: {fileID: 0}
+  isKnightEnemy: 1
+  knightDamage: 4
+  knightRangeVFX: {fileID: 0}
+  isBossEnemy: 0
+  bossDamage: 5
+  bossBulletPrefab: {fileID: 0}
+  bossBulletSpeed: 10
+  bossBulletSpawnOffset: 0.7
+  bossExplosionVFX: {fileID: 0}
+  bossRangeVFX: {fileID: 0}
 --- !u!1 &6842428742406019876
 GameObject:
   m_ObjectHideFlags: 0

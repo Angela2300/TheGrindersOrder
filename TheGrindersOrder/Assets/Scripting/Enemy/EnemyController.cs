@@ -3,51 +3,163 @@ using System.Collections;
 
 public class EnemyController : MonoBehaviour
 {
+    [Header("CSV Enemy Data")]
     public string enemyID;
-    public float attackCooldown = 1.5f;
     public EnemyManager manager;
-
-    // This is your main data source, as referenced in your Setup() method
     public EnemyData stats;
+
+    [Header("General Attack")]
+    public float attackCooldown = 0.5f;
+
+    [Header("Shotgun Enemy")]
+    public bool isShotgunEnemy = false;
+    public GameObject shotgunBulletPrefab;
+    public float shotgunBulletSpeed = 12f;
+    public float shotgunBulletSpawnOffset = 1.2f;
+    public int shotgunDamage = 2;
+    public GameObject shotgunRangeVFX;
+
+    [Header("Bomber Enemy")]
+    public bool isBomber = false;
+    public int bomberDamage = 3;
+    public GameObject bomberExplosionVFX;
+
+    [Header("Knight Enemy")]
+    public bool isKnightEnemy = false;
+    public int knightDamage = 4;
+    public GameObject knightRangeVFX;
+
+    [Header("Boss Enemy")]
+    public bool isBossEnemy = false;
+    public int bossDamage = 5;
+    public GameObject bossBulletPrefab;
+    public float bossBulletSpeed = 12f;
+    public float bossBulletSpawnOffset = 1.2f;
+    public GameObject bossExplosionVFX;
+    public GameObject bossRangeVFX;
 
     private float attackTimer;
     private Transform player;
     private bool isAttacking = false;
-
-    public GameObject bulletPrefab;
+    private bool hasExploded = false;
 
     public void Setup(string id)
     {
         enemyID = id.ToLower();
-        if (manager != null && EnemyManager.enemyDatabase.ContainsKey(enemyID))
+
+        if (manager == null)
+        {
+            manager = Object.FindFirstObjectByType<EnemyManager>();
+        }
+
+        if (EnemyManager.enemyDatabase.ContainsKey(enemyID))
         {
             stats = EnemyManager.enemyDatabase[enemyID];
-            var dropScript = GetComponent<EnemyDummyDropWeapon>();
+
+            EnemyDummyDropWeapon dropScript = GetComponent<EnemyDummyDropWeapon>();
             if (dropScript != null)
             {
                 dropScript.maxHealth = stats.health;
                 dropScript.CurrentHealth = stats.health;
             }
         }
+        else
+        {
+            Debug.LogError("Enemy ID not found: " + enemyID);
+        }
+
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        AutoSetEnemyType();
+        SetupAllRangeVFX();
+    }
+
+    private void Start()
+    {
+        if (stats == null && !string.IsNullOrEmpty(enemyID))
+        {
+            Setup(enemyID);
+        }
+    }
+
+    private void AutoSetEnemyType()
+    {
+        string id = enemyID.ToLower();
+
+        if (id.Contains("shotgun"))
+            isShotgunEnemy = true;
+
+        if (id.Contains("bomber"))
+            isBomber = true;
+
+        if (id.Contains("large") || id.Contains("knight"))
+            isKnightEnemy = true;
+
+        if (id.Contains("boss"))
+            isBossEnemy = true;
     }
 
     private void Update()
     {
-        if (stats == null) return;
+        if (stats == null || player == null)
+            return;
 
-        if (!isAttacking && stats.followsPlayer && player != null)
+        float distance = Vector3.Distance(transform.position, player.position);
+
+        float finalAttackRange = stats.attackRange;
+
+        if (isShotgunEnemy)
         {
-            transform.position = Vector3.MoveTowards(transform.position, player.position, stats.moveSpeedValue * Time.deltaTime);
+            finalAttackRange = 6f;
+        }
+
+        if (isBossEnemy)
+        {
+            finalAttackRange = 8f;
+        }
+
+        if (isBomber)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                player.position,
+                stats.moveSpeedValue * Time.deltaTime
+            );
+
+            return;
+        }
+
+        if (distance > finalAttackRange)
+        {
+            transform.position = Vector3.MoveTowards(
+                transform.position,
+                player.position,
+                stats.moveSpeedValue * Time.deltaTime
+            );
         }
 
         attackTimer += Time.deltaTime;
 
-        if (!isAttacking && attackTimer >= attackCooldown)
+        if (distance <= finalAttackRange && attackTimer >= attackCooldown)
         {
-            if (player != null && Vector3.Distance(transform.position, player.position) <= stats.attackRange)
+            attackTimer = 0f;
+
+            if (isShotgunEnemy)
             {
-                StartCoroutine(AttackRoutine());
+                FireShotgun(shotgunBulletPrefab, shotgunBulletSpeed, shotgunBulletSpawnOffset, shotgunDamage);
+            }
+            else if (isBossEnemy)
+            {
+                FireShotgun(bossBulletPrefab, bossBulletSpeed, bossBulletSpawnOffset, bossDamage);
+                SpawnVFX(bossExplosionVFX);
+            }
+            else if (isKnightEnemy)
+            {
+                DamagePlayer(player.gameObject, knightDamage);
+            }
+            else
+            {
+                DamagePlayer(player.gameObject, 1);
             }
         }
     }
@@ -55,45 +167,158 @@ public class EnemyController : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
         isAttacking = true;
-        yield return new WaitForSeconds(0.7f);
+
+        yield return new WaitForSeconds(0.5f);
 
         if (player != null && Vector3.Distance(transform.position, player.position) <= stats.attackRange)
         {
-            if (bulletPrefab != null) FireBullet();
+            if (isKnightEnemy)
+            {
+                DamagePlayer(player.gameObject, knightDamage);
+            }
             else
             {
-                var playerStats = player.GetComponent<PlayerStats>();
-                if (playerStats != null)
-                {
-                    playerStats.TakeDamage(Mathf.CeilToInt(stats.damageHearts));
-                }
+                DamagePlayer(player.gameObject, 1);
             }
         }
 
-        attackTimer = 0f;
         isAttacking = false;
     }
 
-    private void FireBullet()
+    private void FireShotgun(GameObject bulletPrefab, float speed, float spawnOffset, int damage)
     {
-        if (bulletPrefab == null) return;
+        if (bulletPrefab == null || player == null) return;
 
-        GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
-        Vector2 direction = (player.position - transform.position).normalized;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
-        bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+        Vector2 baseDirection = ((Vector2)player.position - (Vector2)transform.position).normalized;
+        float[] spreadAngles = { -25f, 0f, 25f };
 
-        Bullet bulletScript = bullet.GetComponent<Bullet>();
-        if (bulletScript != null) bulletScript.damage = Mathf.CeilToInt(stats.damageHearts);
+        foreach (float spread in spreadAngles)
+        {
+            Vector2 direction = Quaternion.Euler(0f, 0f, spread) * baseDirection;
 
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        if (rb != null) rb.linearVelocity = direction * (bulletScript != null ? bulletScript.speed : 10f);
+            GameObject bullet = Instantiate(
+                bulletPrefab,
+                transform.position + (Vector3)(direction * spawnOffset),
+                Quaternion.identity
+            );
+
+            bullet.transform.localScale = new Vector3(0.15f, 0.15f, 1f);
+
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+            bullet.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+            EnemyBullet enemyBullet = bullet.GetComponent<EnemyBullet>();
+
+            if (enemyBullet != null)
+            {
+                enemyBullet.damage = damage;
+                enemyBullet.speed = speed;
+            }
+
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+
+            if (rb == null)
+            {
+                rb = bullet.AddComponent<Rigidbody2D>();
+            }
+
+            rb.bodyType = RigidbodyType2D.Dynamic;
+            rb.gravityScale = 0f;
+            rb.freezeRotation = true;
+            rb.linearVelocity = direction * speed;
+
+            Collider2D col = bullet.GetComponent<Collider2D>();
+
+            if (col != null)
+            {
+                col.isTrigger = true;
+            }
+
+            Destroy(bullet, 2f);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        HandleTouch(other.gameObject);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        HandleTouch(collision.gameObject);
+    }
+
+    private void HandleTouch(GameObject other)
+    {
+        if (hasExploded) return;
+        if (!other.CompareTag("Player")) return;
+
+        if (isBomber)
+        {
+            hasExploded = true;
+            DamagePlayer(other, bomberDamage);
+            SpawnVFX(bomberExplosionVFX);
+            Destroy(gameObject);
+            return;
+        }
+
+        if (isBossEnemy)
+        {
+            hasExploded = true;
+            DamagePlayer(other, bossDamage);
+            SpawnVFX(bossExplosionVFX);
+        }
+    }
+
+    private void DamagePlayer(GameObject target, int damage)
+    {
+        PlayerStats playerStats = target.GetComponent<PlayerStats>();
+
+        if (playerStats != null)
+        {
+            playerStats.TakeDamage(damage);
+        }
+    }
+
+    private void SetupAllRangeVFX()
+    {
+        SetupRangeVFX(shotgunRangeVFX);
+        SetupRangeVFX(knightRangeVFX);
+        SetupRangeVFX(bossRangeVFX);
+    }
+
+    private void SetupRangeVFX(GameObject rangeVFX)
+    {
+        if (rangeVFX == null || stats == null) return;
+
+        rangeVFX.SetActive(true);
+
+        float size = stats.attackRange * 2f;
+        rangeVFX.transform.localScale = new Vector3(size, size, 1f);
+    }
+
+    private void SpawnVFX(GameObject vfxPrefab)
+    {
+        if (vfxPrefab == null) return;
+
+        GameObject vfx = Instantiate(
+            vfxPrefab,
+            transform.position + new Vector3(0f, 0f, -5f),
+            Quaternion.identity
+        );
+
+        Destroy(vfx, 3f);
     }
 
     public void Die()
     {
-        if (manager != null)
-            Object.FindFirstObjectByType<LevelManager>().RegisterCustomerServed(gameObject);
+        LevelManager levelManager = Object.FindFirstObjectByType<LevelManager>();
+
+        if (levelManager != null)
+        {
+            levelManager.RegisterCustomerServed(gameObject);
+        }
+
         Destroy(gameObject);
     }
 }

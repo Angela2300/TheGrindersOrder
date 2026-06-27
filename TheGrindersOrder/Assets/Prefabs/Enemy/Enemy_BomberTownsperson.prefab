@@ -484,6 +484,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyDropWeapon
   maxHealth: 120
+  currentHealth: 0
   healthSlider: {fileID: 7109516528844526793}
   weaponDropPrefab: {fileID: 3193358891787835273, guid: 423ff89f1780c324692f11ff1c364f0b, type: 3}
   coinDropPrefab: {fileID: 3494748787314022983, guid: 0fce23a06d32d06429effd29165fd942, type: 3}
@@ -501,7 +502,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   enemyID: enemy_medium_bomber
+  manager: {fileID: 0}
+  stats:
+    enemyID: 
+    displayName: 
+    role: 
+    attackType: 
+    damageHearts: 0
+    damageLives: 0
+    attackRange: 0
+    health: 0
+    moveSpeedTier: 
+    moveSpeedValue: 0
+    rangeTier: 
+    followsPlayer: 0
+    meatDropAmt: 0
+    coinDropAmt: 0
+    weaponId: 
+    spawnCount: 0
+    isBomber: 0
   attackCooldown: 1.5
+  isShotgunEnemy: 0
+  shotgunBulletPrefab: {fileID: 7904490220867315166, guid: dcf68a88ac78c7240a5d8ea0d4d68a37, type: 3}
+  shotgunBulletSpeed: 1
+  shotgunBulletSpawnOffset: 0.7
+  shotgunDamage: 2
+  shotgunRangeVFX: {fileID: 0}
+  isBomber: 1
+  bomberDamage: 3
+  bomberExplosionVFX: {fileID: 8038344524183138613, guid: 0277167a12290af47801444830a2be97, type: 3}
+  isKnightEnemy: 0
+  knightDamage: 4
+  knightRangeVFX: {fileID: 0}
+  isBossEnemy: 0
+  bossDamage: 100
+  bossBulletPrefab: {fileID: 0}
+  bossBulletSpeed: 10
+  bossBulletSpawnOffset: 0.7
+  bossExplosionVFX: {fileID: 0}
+  bossRangeVFX: {fileID: 0}
 --- !u!1 &9077657281647062166
 GameObject:
   m_ObjectHideFlags: 0
