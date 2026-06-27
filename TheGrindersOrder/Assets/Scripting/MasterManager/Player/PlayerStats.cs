@@ -328,8 +328,16 @@ public class PlayerStats : MonoBehaviour
 
     void GameOver()
     {
-        Debug.Log("Game Over!");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Debug.Log("Game Over! Player has died.");
+
+        //  Show death canvas instead of reloading scene
+        if (LevelManager.Instance != null)
+        {
+            LevelManager.Instance.PlayerDied();
+        }
+
+        // Remove or comment out this line if you don’t want auto reload
+        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     void RefreshUI()
@@ -338,5 +346,15 @@ public class PlayerStats : MonoBehaviour
         {
             playerUI.UpdateUI(hearts, shields, coins);
         }
+    }
+
+    public void ResetStats()
+    {
+        hearts = maxHearts;   // restore full health
+        shields = 3;          // or whatever default you want
+        coins = 0;            // optional, reset coins if needed
+
+        RefreshUI();
+        Debug.Log("[PlayerStats] Stats reset on restart");
     }
 }

@@ -77,6 +77,28 @@ public class LevelManager : MonoBehaviour
         UpdateHUD();
     }
 
+    public void RestartLevel()
+    {
+        // Reset player stats
+        PlayerStats player = FindObjectOfType<PlayerStats>();
+        if (player != null)
+            player.ResetStats();
+
+        // Clear leftover enemies
+        foreach (var enemy in activeEnemies)
+        {
+            if (enemy != null)
+                Destroy(enemy);
+        }
+        activeEnemies.Clear();
+
+        // Reload current level
+        if (currentLevel != null)
+            StartLevel(currentLevel);
+        else
+            StartLevel(LevelLoader.levels[0]); // fallback to level 1
+    }
+
     // ---------------------------
     // MEAT COLLECTION
     // ---------------------------
@@ -130,9 +152,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (RanOutOfTimeCanvas != null)
             RanOutOfTimeCanvas.SetActive(true);
-
-        // Reset back to Level 1
-        StartLevel(LevelLoader.levels[0]);
+        // Restart is triggered by button, not automatically
     }
 
     private void YouWon()
@@ -147,6 +167,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (Youdied != null)
             Youdied.SetActive(true);
+        // Restart is triggered by button, not automatically
     }
 
     // ---------------------------

@@ -1920,6 +1920,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1613559800}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &180238333
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6292,6 +6304,7 @@ GameObject:
   - component: {fileID: 596889346}
   - component: {fileID: 596889345}
   - component: {fileID: 596889344}
+  - component: {fileID: 596889347}
   m_Layer: 5
   m_Name: Restart
   m_TagString: Untagged
@@ -6375,6 +6388,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1613559800}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &596889345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6413,6 +6438,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596889342}
   m_CullTransparentMesh: 1
+--- !u!114 &596889347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596889342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0abb83e1c37564aae98a8f448b0742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  isLevelActive: 0
+  activeEnemies: []
+  timerText: {fileID: 0}
+  levelText: {fileID: 0}
+  customersText: {fileID: 0}
+  meatinventorytext: {fileID: 0}
+  Youdied: {fileID: 0}
+  RanOutOfTimeCanvas: {fileID: 0}
+  MoveOnNextLevelCanvas: {fileID: 0}
+  YouWonCanvas: {fileID: 0}
 --- !u!1 &604310830
 GameObject:
   m_ObjectHideFlags: 0
@@ -20615,6 +20662,7 @@ GameObject:
   - component: {fileID: 2090625700}
   - component: {fileID: 2090625699}
   - component: {fileID: 2090625698}
+  - component: {fileID: 2090625701}
   m_Layer: 5
   m_Name: Restart
   m_TagString: Untagged
@@ -20698,6 +20746,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1613559800}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2090625699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20736,6 +20796,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090625696}
   m_CullTransparentMesh: 1
+--- !u!114 &2090625701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090625696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0abb83e1c37564aae98a8f448b0742, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LevelManager
+  isLevelActive: 0
+  activeEnemies: []
+  timerText: {fileID: 0}
+  levelText: {fileID: 0}
+  customersText: {fileID: 0}
+  meatinventorytext: {fileID: 0}
+  Youdied: {fileID: 0}
+  RanOutOfTimeCanvas: {fileID: 0}
+  MoveOnNextLevelCanvas: {fileID: 0}
+  YouWonCanvas: {fileID: 0}
 --- !u!1 &2102562951
 GameObject:
   m_ObjectHideFlags: 0
