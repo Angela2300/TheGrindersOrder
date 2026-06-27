@@ -123,6 +123,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (MoveOnNextLevelCanvas != null)
             MoveOnNextLevelCanvas.SetActive(true);
+        Time.timeScale = 0f; //pause
     }
 
     private void RanOutOfTime()
@@ -130,7 +131,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (RanOutOfTimeCanvas != null)
             RanOutOfTimeCanvas.SetActive(true);
-            Time.timeScale = 0f; // Freezes time-based logic and physics
+            Time.timeScale = 0f; //pause
     }
 
     private void YouWon()
@@ -138,6 +139,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (YouWonCanvas != null)
             YouWonCanvas.SetActive(true);
+        Time.timeScale = 0f; //pause
     }
 
     public void PlayerDied()
@@ -145,6 +147,7 @@ public class LevelManager : MonoBehaviour
         isLevelActive = false;
         if (Youdied != null)
             Youdied.SetActive(true);
+        Time.timeScale = 0f; //pause
     }
 
     // ---------------------------
