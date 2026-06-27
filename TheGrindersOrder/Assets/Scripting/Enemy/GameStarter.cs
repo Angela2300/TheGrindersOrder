@@ -1,9 +1,12 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameStarter : MonoBehaviour
 {
     private LevelManager lm;
     private int currentLevelIndex = 0;
+
+    [SerializeField] private string targetSceneName;
 
     void Start()
     {
@@ -16,25 +19,21 @@ public class GameStarter : MonoBehaviour
         {
             Debug.LogWarning("No LevelManager or Levels found!");
         }
+        Time.timeScale = 1f;
     }
 
-    void Update()
-    {
-        if (lm == null) return;
 
-        // Check if all enemies are cleared
-        if (lm.activeEnemies.Count == 0 && lm.isLevelActive)
+    public void ResetChosenScene()
+    {
+
+        if (string.IsNullOrEmpty(targetSceneName))
         {
-            currentLevelIndex++;
-            if (currentLevelIndex < LevelLoader.levels.Count)
-            {
-                StartLevel(currentLevelIndex);
-            }
-            else
-            {
-                Debug.Log("All test levels completed!");
-            }
+            Debug.LogError("Target scene name is empty! Please assign it in the Inspector.");
+            return;
         }
+
+        SceneManager.LoadScene(targetSceneName);
+        Time.timeScale = 1f;
     }
 
     private void StartLevel(int index)
@@ -42,7 +41,6 @@ public class GameStarter : MonoBehaviour
         LevelData level = LevelLoader.levels[index];
         lm.StartLevel(level);
         Debug.Log("Started Level " + (index + 1) + " for testing.");
+        Time.timeScale = 1f;
     }
 }
-
-

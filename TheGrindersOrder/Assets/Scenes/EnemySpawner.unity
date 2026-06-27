@@ -1920,9 +1920,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1613559800}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: RestartLevel
+      - m_Target: {fileID: 1890196156}
+        m_TargetAssemblyTypeName: GameStarter, Assembly-CSharp
+        m_MethodName: ResetChosenScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6388,9 +6388,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1613559800}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: RestartLevel
+      - m_Target: {fileID: 1890196156}
+        m_TargetAssemblyTypeName: GameStarter, Assembly-CSharp
+        m_MethodName: ResetChosenScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18870,6 +18870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f19d1d3cf21048045a60fb0bd32977b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameStarter
+  targetSceneName: EnemySpawner
 --- !u!4 &1890196157
 Transform:
   m_ObjectHideFlags: 0
@@ -20746,9 +20747,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1613559800}
-        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: RestartLevel
+      - m_Target: {fileID: 1890196156}
+        m_TargetAssemblyTypeName: GameStarter, Assembly-CSharp
+        m_MethodName: ResetChosenScene
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
