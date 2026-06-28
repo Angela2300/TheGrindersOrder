@@ -51,6 +51,7 @@ public class EnemySpawner : MonoBehaviour
         Debug.Log("Spawning enemy: " + enemyId + " at " + spawnPoints[spawnIndex].name);
     }
 
+
     public IEnumerator SpawnWave(LevelData level)
     {
         if (spawnPoints == null || spawnPoints.Length == 0)

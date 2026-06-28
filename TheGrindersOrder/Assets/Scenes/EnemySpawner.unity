@@ -14297,11 +14297,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   enemiesCSV: {fileID: 4900000, guid: aece1a82483e9cc468dabd3f559faccf, type: 3}
-  smallPrefab: {fileID: 7759131747936290795, guid: 605d146f2b8c9be4696be54e82aff566, type: 3}
-  mediumShotgunPrefab: {fileID: 5299295395274665742, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
-  mediumBomberPrefab: {fileID: 6301722452126551409, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
-  largePrefab: {fileID: 3726477431155707728, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
+  smallPrefab: {fileID: 8880974271589980914, guid: 7a4b574c14cc79d47b0d01892e9094b9, type: 3}
+  mediumShotgunPrefab: {fileID: 6781907907513710450, guid: 0a21ef71256700b4cafaa5d10ea368e9, type: 3}
+  mediumBomberPrefab: {fileID: 4012398331869383998, guid: 4c5c42b8092762e45b64515a8b68758e, type: 3}
+  largePrefab: {fileID: 3675164031630925291, guid: 419e4359edf3da846ac5e28667b7d962, type: 3}
   bossPrefab: {fileID: 7463149923302653149, guid: 3d6d9f3502d219d48ab644b40bea4924, type: 3}
+  mediumShotgunWeaponPrefab: {fileID: 5299295395274665742, guid: df641d37a4d116b4690156c9268dfd92, type: 3}
+  mediumBomberWeaponPrefab: {fileID: 6301722452126551409, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
+  largeWeaponPrefab: {fileID: 3726477431155707728, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
 --- !u!1 &1467981130
 GameObject:
   m_ObjectHideFlags: 0

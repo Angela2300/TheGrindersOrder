@@ -15,6 +15,7 @@ public class EnemyManager : MonoBehaviour
     public GameObject largePrefab;
     public GameObject bossPrefab;
 
+
     private static EnemyManager instance;
 
     private void Awake()

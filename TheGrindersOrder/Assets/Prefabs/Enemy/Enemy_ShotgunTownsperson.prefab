@@ -501,7 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ecb710301b141d40920f79b06e9f692, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
-  enemyID: enemy_medium_shotgun
+  enemyID: enemy_medium_bomber_weapon
   manager: {fileID: 0}
   stats:
     enemyID: 
