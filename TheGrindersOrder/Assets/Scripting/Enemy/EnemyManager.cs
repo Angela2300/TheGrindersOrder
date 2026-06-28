@@ -35,7 +35,6 @@ public class EnemyManager : MonoBehaviour
 
         if (enemiesCSV == null)
         {
-            Debug.LogError("Enemies CSV is not assigned in EnemyManager!");
             return;
         }
 
@@ -52,7 +51,6 @@ public class EnemyManager : MonoBehaviour
 
             if (values.Length < 17)
             {
-                Debug.LogWarning("Skipped bad enemy CSV row: " + lines[i]);
                 continue;
             }
 
@@ -97,7 +95,6 @@ public class EnemyManager : MonoBehaviour
             if (!enemyDatabase.ContainsKey(id))
             {
                 enemyDatabase.Add(id, data);
-                Debug.Log("Loaded enemy ID: " + id);
             }
         }
     }
