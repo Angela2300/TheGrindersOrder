@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0ef956a7379a7384ba77bd20650072cb
+guid: a192cd2e913280e4aa2464cca69894be
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6453133119263995504
-    second: shop sprite 2_0
+      213: -7450643743984737761
+    second: shop sprite_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,23 +100,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shop sprite 2_0
+      name: shop sprite_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 25
-        width: 1219
-        height: 1220
+        x: 30
+        y: 49
+        width: 1185
+        height: 1171
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 076f90eb1622e8950800000000000000
-      internalID: 6453133119263995504
+      spriteID: f12adc37dfef99890800000000000000
+      internalID: -7450643743984737761
       vertices: []
       indices: 
       edges: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3e8c753e07ccd4844a409af4aa98fcac
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shop sprite 2_0: 6453133119263995504
+      shop sprite_0: -7450643743984737761
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
