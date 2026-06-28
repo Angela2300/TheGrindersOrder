@@ -5051,12 +5051,6 @@ MonoBehaviour:
   launcherBulletPrefab: {fileID: 925736216617855593, guid: 08bfa865300c5894e9ce86337a190c58, type: 3}
   firePoint: {fileID: 1775227630}
   weaponsCSV: {fileID: 4900000, guid: c6222614590108a4382fb18aef9b9996, type: 3}
-  audioSource: {fileID: 651403372}
-  pistolSound: {fileID: 8300000, guid: e105cb61a60082142ba282fa25bd4316, type: 3}
-  smgSound: {fileID: 0}
-  shotgunSound: {fileID: 0}
-  launcherSound: {fileID: 0}
-  reloadSound: {fileID: 0}
   pistolPrefab: {fileID: 2909629809158839127, guid: 064c38e384ca89c468e4352ed13599b4, type: 3}
   smgPrefab: {fileID: 6935904254583192650, guid: 91d03b30fb2b6d1409531341a2b32e3e, type: 3}
   shotgunPrefab: {fileID: 7611914785890187625, guid: b158b65f215cbca4085da22300e9335f, type: 3}
@@ -18678,6 +18672,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e25dbfab355d74e91904daf890ed24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  persistAcrossScenes: 1
+  clips:
+    musicTracks:
+    - {fileID: 8300000, guid: b9ab82eba8d6f324f8e2dd495013bb6e, type: 3}
+    playerHurt: {fileID: 8300000, guid: 9b1368d271b8fa44d803687c9de727fd, type: 3}
+    playerDeath: {fileID: 8300000, guid: 50c3e4b902ab41f45854fe37022427cd, type: 3}
+    weaponShoot: {fileID: 8300000, guid: 904518fd7900b8e4b9c79dde4dc350d3, type: 3}
+    weaponReload: {fileID: 8300000, guid: c18d9b571a1303b49a576dc423d91de9, type: 3}
+    enemyHit: {fileID: 8300000, guid: f606c301d957dd145b538e388435dad6, type: 3}
+    enemyDeath: {fileID: 8300000, guid: 50c3e4b902ab41f45854fe37022427cd, type: 3}
+    lootPickup: {fileID: 8300000, guid: 5a390dc613e1c59458be6ed756c0899d, type: 3}
+    meatPickup: {fileID: 8300000, guid: 93306304b144ed54682893113619b464, type: 3}
+    coinPickup: {fileID: 8300000, guid: a94087a194552514292194f4ba01efcf, type: 3}
+    shopOpen: {fileID: 8300000, guid: 81c5a53df5dddb449b067c3dad7a56d6, type: 3}
+    shopClose: {fileID: 8300000, guid: c744324e07785b34c8f7bf4f953fa53c, type: 3}
+    upgradeSuccess: {fileID: 8300000, guid: 5b53685380ebd5c4981077c8df57e4e7, type: 3}
+    upgradeFail: {fileID: 8300000, guid: a1d69b5f974ba704f8b908f47861a983, type: 3}
+    sellSuccess: {fileID: 8300000, guid: 5b53685380ebd5c4981077c8df57e4e7, type: 3}
+    sellFail: {fileID: 8300000, guid: a1d69b5f974ba704f8b908f47861a983, type: 3}
+  musicSource: {fileID: 0}
+  sfxSource: {fileID: 0}
+  masterVolume: 1
+  musicVolume: 1
+  sfxVolume: 1
+  logMissingClipWarnings: 1
 --- !u!4 &1812045676
 Transform:
   m_ObjectHideFlags: 0
