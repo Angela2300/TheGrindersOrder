@@ -1,5 +1,7 @@
 # Project Title: The Grinder's Orders
 
+##Team Name: Goofy Devs
+
 ## Overview
 A fast-paced top-down shooter where players take on the role of a butcher supplying meat to a demon bar. Players must fend off waves of human enemies using four different types of weapons, collect resources, and survive escalating difficulty within a tight time loop.
 
