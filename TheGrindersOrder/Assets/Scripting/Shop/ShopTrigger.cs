@@ -67,7 +67,11 @@ public class ShopTrigger : MonoBehaviour
 
     public void OpenShop()
     {
+
         if (shopPanel == null) return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayShopOpen();
 
         shopPanel.SetActive(true);
 
@@ -84,15 +88,16 @@ public class ShopTrigger : MonoBehaviour
     public void CloseShop()
     {
         if (shopPanel == null) return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayShopClose();
+
         shopPanel.SetActive(false);
 
         // NEW: Resume the game when the shop closes
         Time.timeScale = 1f;
-
-        OnShopClosed?.Invoke();
     }
 }
-
 
 
 //using System;

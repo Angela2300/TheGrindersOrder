@@ -21,14 +21,6 @@ public class WeaponSystem : MonoBehaviour
     [Header("Weapon CSV")]
     public TextAsset weaponsCSV;
 
-    [Header("Gun Sounds")]
-    public AudioSource audioSource;
-    public AudioClip pistolSound;
-    public AudioClip smgSound;
-    public AudioClip shotgunSound;
-    public AudioClip launcherSound;
-    public AudioClip reloadSound;
-
     [Header("Player Weapon Prefabs")]
     public GameObject pistolPrefab;
     public GameObject smgPrefab;
@@ -163,7 +155,6 @@ public class WeaponSystem : MonoBehaviour
             return;
         }
 
-        // Remove old weapon visual first so pistol/shotgun do not overlap.
         foreach (Transform child in weaponHolder)
         {
             Destroy(child.gameObject);
@@ -189,6 +180,9 @@ public class WeaponSystem : MonoBehaviour
 
     void Fire(Vector2 direction)
     {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayWeaponShoot();
+
         switch (currentWeapon)
         {
             case WeaponType.Pistol:
@@ -224,19 +218,8 @@ public class WeaponSystem : MonoBehaviour
         return currentDamage * playerStats.weaponDamageMultiplier;
     }
 
-    void PlayGunSound(AudioClip clip)
-    {
-        if (audioSource != null && clip != null)
-        {
-            audioSource.PlayOneShot(clip);
-        }
-    }
-
     void FireSingle()
     {
-        // Pistol sound
-        PlayGunSound(pistolSound);
-
         GameObject bulletObject = Instantiate(
             bulletPrefab,
             firePoint.position,
@@ -256,17 +239,6 @@ public class WeaponSystem : MonoBehaviour
 
     void FireSpread(int bulletCount, float spreadAngle, bool randomSpread)
     {
-        // SMG / Shotgun sound
-        if (currentWeapon == WeaponType.SMG)
-        {
-            PlayGunSound(smgSound);
-        }
-
-        if (currentWeapon == WeaponType.Shotgun)
-        {
-            PlayGunSound(shotgunSound);
-        }
-
         for (int i = 0; i < bulletCount; i++)
         {
             float angleOffset = randomSpread
@@ -296,9 +268,6 @@ public class WeaponSystem : MonoBehaviour
 
     void FireLauncher()
     {
-        // Launcher sound
-        PlayGunSound(launcherSound);
-
         GameObject bulletObject = Instantiate(
             bulletPrefab,
             firePoint.position,
@@ -322,8 +291,8 @@ public class WeaponSystem : MonoBehaviour
         {
             isReloading = true;
 
-            // Play reload sound once
-            PlayGunSound(reloadSound);
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayWeaponReload();
 
             Invoke(nameof(FinishReload), reloadTime);
         }

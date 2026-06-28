@@ -88,6 +88,10 @@ public class SellCircle : MonoBehaviour
         if (meatCount <= 0)
         {
             ShowFeedback("No meat to sell.");
+
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySellFail();
+
             return;
         }
 
@@ -99,6 +103,9 @@ public class SellCircle : MonoBehaviour
         RefreshInventoryUI();
 
         ShowFeedback($"Sold {meatCount} meat for {coinsEarned} coins.");
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySellSuccess();
 
         LevelManager.OnMeatSold(meatCount);
 
@@ -175,4 +182,6 @@ public class SellCircle : MonoBehaviour
         if (feedbackText != null)
             feedbackText.gameObject.SetActive(false);
     }
+
+  
 }

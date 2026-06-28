@@ -124,10 +124,11 @@ public class ShopDetailPageUI : MonoBehaviour
             buyButton.interactable = !isMaxed;
     }
 
- 
+
     public void TryBuySelectedUpgrade()
     {
         if (string.IsNullOrEmpty(selectedCategory)) return;
+
 
         shopSystem.TryPurchase(selectedCategory);
 

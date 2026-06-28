@@ -103,6 +103,9 @@ public class ShopSystem : MonoBehaviour
 
         if (playerCoins < cost)
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayUpgradeFail();
+
             OnPurchaseFailed?.Invoke($"Not enough coins. Need {cost}, have {playerCoins}.");
             return;
         }
@@ -119,9 +122,10 @@ public class ShopSystem : MonoBehaviour
 
         float effectValue = option.GetEffect(nextLevel);
 
-        OnUpgradePurchased?.Invoke(category, nextLevel, option.effectType, effectValue);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayUpgradeSuccess();
 
-        Debug.Log($"[ShopSystem] Purchased {category} level {nextLevel}. Cost: {cost}. Effect: {option.effectType} = {effectValue}");
+        OnUpgradePurchased?.Invoke(category, nextLevel, option.effectType, effectValue);
     }
 
     private int GetCoinCount()

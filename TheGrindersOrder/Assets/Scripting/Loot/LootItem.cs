@@ -16,7 +16,6 @@ public class LootItem : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        // Only Player can pick up loot
         if (!other.CompareTag("Player")) return;
 
         PlayerInventory inventory = other.GetComponent<PlayerInventory>();
@@ -28,6 +27,16 @@ public class LootItem : MonoBehaviour
         }
 
         inventory.AddItem(resourceType, amount);
+
+        if (AudioManager.Instance != null)
+        {
+            if (resourceType == "loot_meat")
+                AudioManager.Instance.PlayMeatPickup();
+            else if (resourceType == "loot_coin")
+                AudioManager.Instance.PlayCoinPickup();
+            else
+                AudioManager.Instance.PlayLootPickup();
+        }
 
         Destroy(gameObject);
     }

@@ -240,6 +240,9 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log($"Taking {damage} damage. Current Shields: {shields}, Hearts: {hearts}");
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayPlayerHurt();
+
         int remainingDamage = damage;
 
         // 1. Process damage against Shields
@@ -330,17 +333,17 @@ public class PlayerStats : MonoBehaviour
     {
         Debug.Log("Game Over! Player has died.");
 
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayPlayerDeath();
+
         //  Show death canvas instead of reloading scene
         if (LevelManager.Instance != null)
         {
             LevelManager.Instance.PlayerDied();
         }
-
-        // Remove or comment out this line if you don’t want auto reload
-        // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void RefreshUI()
+        void RefreshUI()
     {
         if (playerUI != null)
         {
