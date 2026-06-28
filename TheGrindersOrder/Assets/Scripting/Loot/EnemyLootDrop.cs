@@ -1,6 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//     Enemy teammate adds ONE line to their death function:
+//     GetComponent<EnemyLootDrop>()?.SpawnLoot(transform.position);
+//
+// DOES NOT DEPEND ON: CSVLoader, LootRow, PlayerInventory, PlayerStats
+
+
 public class EnemyLootDrop : MonoBehaviour
 {
     [Header("Enemy Identity")]
@@ -26,6 +32,7 @@ public class EnemyLootDrop : MonoBehaviour
     [Tooltip("How far apart dropped items scatter from the death position")]
     public float scatterRadius = 0.5f;
 
+    //Called by enemy teammate's death function 
     public void SpawnLoot(Vector3 deathPosition)
     {
         if (dataProvider == null)

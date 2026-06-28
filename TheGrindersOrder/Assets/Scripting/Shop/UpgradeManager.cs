@@ -22,7 +22,10 @@ public class UpgradeManager : MonoBehaviour
     private void ApplyUpgrade(string category, int newLevel, string effectType, float effectValue)
     {
         if (playerStats == null)
+        {
+            Debug.LogWarning("[UpgradeManager] No PlayerStats found.");
             return;
+        }
 
         switch (effectType)
         {
@@ -41,6 +44,12 @@ public class UpgradeManager : MonoBehaviour
             case "damage_multiplier":
                 playerStats.SetWeaponDamageMultiplier(effectValue);
                 break;
+
+            default:
+                Debug.LogWarning("[UpgradeManager] Unknown effect type: " + effectType);
+                break;
         }
+
+        Debug.Log($"[UpgradeManager] Applied {category} Lv {newLevel}: {effectType} = {effectValue}");
     }
 }

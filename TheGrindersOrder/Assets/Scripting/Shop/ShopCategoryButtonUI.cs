@@ -4,10 +4,10 @@ using UnityEngine.UI;
 
 public class ShopCategoryButtonUI : MonoBehaviour
 {
-    [Header("Category")]
+    [Header("Category — must match UpgradeOption.category in ShopSystem")]
     public string upgradeCategory = "health";
 
-    [Header("UI References")]
+    [Header("UI References — drag children of this button")]
     public TextMeshProUGUI categoryNameText;
     public Image iconImage;
     public TextMeshProUGUI levelPreviewText;
@@ -22,10 +22,10 @@ public class ShopCategoryButtonUI : MonoBehaviour
     {
         button = GetComponent<Button>();
         if (button != null)
-            return;
-
             button.onClick.AddListener(OnClick);
-      
+        else
+            Debug.LogWarning($"[ShopCategoryButtonUI] No Button component found on {gameObject.name}.");
+
         RefreshPreview();
     }
 
@@ -34,12 +34,18 @@ public class ShopCategoryButtonUI : MonoBehaviour
         RefreshPreview();
     }
 
+    //Updates the small preview shown on the category card
     public void RefreshPreview()
     {
         if (shopDetailPage == null || shopDetailPage.shopSystem == null) return;
 
         UpgradeOption option = shopDetailPage.shopSystem.GetOption(upgradeCategory);
-       
+        if (option == null)
+        {
+            Debug.LogWarning($"[ShopCategoryButtonUI] No UpgradeOption found for category '{upgradeCategory}'.");
+            return;
+        }
+
         int currentLevel = shopDetailPage.shopSystem.GetCurrentLevel(upgradeCategory);
 
         if (categoryNameText != null)
