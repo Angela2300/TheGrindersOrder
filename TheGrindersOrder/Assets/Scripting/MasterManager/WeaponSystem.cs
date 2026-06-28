@@ -21,6 +21,21 @@ public class WeaponSystem : MonoBehaviour
     [Header("Weapon CSV")]
     public TextAsset weaponsCSV;
 
+    [Header("Gun Sounds")]
+    public AudioSource audioSource;
+    public AudioClip pistolSound;
+    public AudioClip smgSound;
+    public AudioClip shotgunSound;
+    public AudioClip launcherSound;
+    public AudioClip reloadSound;
+
+    [Header("Player Weapon Prefabs")]
+    public GameObject pistolPrefab;
+    public GameObject smgPrefab;
+    public GameObject shotgunPrefab;
+    public GameObject launcherPrefab;
+    public Transform weaponHolder;
+
     float currentDamage;
     int currentAmmo;
     int maxAmmo;
@@ -30,6 +45,7 @@ public class WeaponSystem : MonoBehaviour
     bool isReloading;
     float lastShotTime;
 
+    GameObject currentWeaponVisual;
     private PlayerStats playerStats;
 
     public float CurrentDamage => currentDamage;
@@ -37,19 +53,9 @@ public class WeaponSystem : MonoBehaviour
     public int MaxAmmo => maxAmmo;
     public bool IsReloading => isReloading;
 
-    [Header("Player Weapon Prefabs")]
-    public GameObject pistolPrefab;
-    public GameObject smgPrefab;
-    public GameObject shotgunPrefab;
-    public GameObject launcherPrefab;
-
-    public Transform weaponHolder;
-    GameObject currentWeaponVisual;
-
     void Start()
     {
         playerStats = GetComponentInParent<PlayerStats>();
-
         ApplyWeaponStats(currentWeapon);
         UpdatePlayerVisual();
     }
@@ -63,7 +69,9 @@ public class WeaponSystem : MonoBehaviour
     public void ManualReload()
     {
         if (currentAmmo < maxAmmo && !isReloading)
+        {
             StartReload();
+        }
     }
 
     public void SetWeapon(WeaponType weaponType)
@@ -89,26 +97,36 @@ public class WeaponSystem : MonoBehaviour
         for (int i = 1; i < lines.Length; i++)
         {
             string line = lines[i].Trim();
-            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
 
             string[] values = line.Split(',');
-            if (values.Length < 7) continue;
+
+            if (values.Length < 7)
+                continue;
 
             if (values[0] == targetID)
             {
-                if (float.TryParse(values[3], out float dmg)) currentDamage = dmg;
-                if (int.TryParse(values[4], out int ammo)) maxAmmo = ammo;
-                if (float.TryParse(values[5], out float rTime)) reloadTime = rTime;
-                if (float.TryParse(values[6], out float fRate)) fireRate = fRate;
+                if (float.TryParse(values[3], out float dmg))
+                    currentDamage = dmg;
+
+                if (int.TryParse(values[4], out int ammo))
+                    maxAmmo = ammo;
+
+                if (float.TryParse(values[5], out float rTime))
+                    reloadTime = rTime;
+
+                if (float.TryParse(values[6], out float fRate))
+                    fireRate = fRate;
+
                 break;
             }
         }
 
-        switch (weaponType)
+        if (weaponType == WeaponType.Launcher)
         {
-            case WeaponType.Launcher:
-                bulletPrefab = launcherBulletPrefab;
-                break;
+            bulletPrefab = launcherBulletPrefab;
         }
 
         currentAmmo = maxAmmo;
@@ -127,17 +145,29 @@ public class WeaponSystem : MonoBehaviour
         }
 
         Fire(direction);
+
         currentAmmo--;
         lastShotTime = Time.time;
 
         if (currentAmmo <= 0)
+        {
             StartReload();
+        }
     }
 
     void UpdatePlayerVisual()
     {
-        if (currentWeaponVisual != null)
-            Destroy(currentWeaponVisual);
+        if (weaponHolder == null)
+        {
+            Debug.LogError("Weapon Holder is missing!");
+            return;
+        }
+
+        // Remove old weapon visual first so pistol/shotgun do not overlap.
+        foreach (Transform child in weaponHolder)
+        {
+            Destroy(child.gameObject);
+        }
 
         GameObject prefabToSpawn = currentWeapon switch
         {
@@ -150,12 +180,10 @@ public class WeaponSystem : MonoBehaviour
 
         if (prefabToSpawn != null)
         {
-            currentWeaponVisual = Instantiate(
-                prefabToSpawn,
-                weaponHolder.position,
-                weaponHolder.rotation,
-                weaponHolder
-            );
+            currentWeaponVisual = Instantiate(prefabToSpawn, weaponHolder);
+            currentWeaponVisual.transform.localPosition = Vector3.zero;
+            currentWeaponVisual.transform.localRotation = Quaternion.identity;
+            currentWeaponVisual.transform.localScale = Vector3.one;
         }
     }
 
@@ -184,16 +212,31 @@ public class WeaponSystem : MonoBehaviour
     float GetFinalDamage()
     {
         if (playerStats == null)
+        {
             playerStats = GetComponentInParent<PlayerStats>();
+        }
 
         if (playerStats == null)
+        {
             return currentDamage;
+        }
 
         return currentDamage * playerStats.weaponDamageMultiplier;
     }
 
+    void PlayGunSound(AudioClip clip)
+    {
+        if (audioSource != null && clip != null)
+        {
+            audioSource.PlayOneShot(clip);
+        }
+    }
+
     void FireSingle()
     {
+        // Pistol sound
+        PlayGunSound(pistolSound);
+
         GameObject bulletObject = Instantiate(
             bulletPrefab,
             firePoint.position,
@@ -213,6 +256,17 @@ public class WeaponSystem : MonoBehaviour
 
     void FireSpread(int bulletCount, float spreadAngle, bool randomSpread)
     {
+        // SMG / Shotgun sound
+        if (currentWeapon == WeaponType.SMG)
+        {
+            PlayGunSound(smgSound);
+        }
+
+        if (currentWeapon == WeaponType.Shotgun)
+        {
+            PlayGunSound(shotgunSound);
+        }
+
         for (int i = 0; i < bulletCount; i++)
         {
             float angleOffset = randomSpread
@@ -242,6 +296,9 @@ public class WeaponSystem : MonoBehaviour
 
     void FireLauncher()
     {
+        // Launcher sound
+        PlayGunSound(launcherSound);
+
         GameObject bulletObject = Instantiate(
             bulletPrefab,
             firePoint.position,
@@ -264,6 +321,10 @@ public class WeaponSystem : MonoBehaviour
         if (!isReloading)
         {
             isReloading = true;
+
+            // Play reload sound once
+            PlayGunSound(reloadSound);
+
             Invoke(nameof(FinishReload), reloadTime);
         }
     }
