@@ -2607,7 +2607,45 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyController
   enemyID: enemy_medium_bomber
+  manager: {fileID: 0}
+  stats:
+    enemyID: 
+    displayName: 
+    role: 
+    attackType: 
+    damageHearts: 0
+    damageLives: 0
+    attackRange: 0
+    health: 0
+    moveSpeedTier: 
+    moveSpeedValue: 0
+    rangeTier: 
+    followsPlayer: 0
+    meatDropAmt: 0
+    coinDropAmt: 0
+    weaponId: 
+    spawnCount: 0
+    isBomber: 0
   attackCooldown: 1.5
+  isShotgunEnemy: 0
+  shotgunBulletPrefab: {fileID: 0}
+  shotgunBulletSpeed: 12
+  shotgunBulletSpawnOffset: 1.2
+  shotgunDamage: 2
+  shotgunRangeVFX: {fileID: 0}
+  isBomber: 0
+  bomberDamage: 3
+  bomberExplosionVFX: {fileID: 0}
+  isKnightEnemy: 0
+  knightDamage: 4
+  knightRangeVFX: {fileID: 0}
+  isBossEnemy: 0
+  bossDamage: 5
+  bossBulletPrefab: {fileID: 0}
+  bossBulletSpeed: 12
+  bossBulletSpawnOffset: 1.2
+  bossExplosionVFX: {fileID: 0}
+  bossRangeVFX: {fileID: 0}
 --- !u!1 &1021397018
 GameObject:
   m_ObjectHideFlags: 0
@@ -2697,7 +2735,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f380a47bc7d2cdf4083ec95b5740f519, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DraggableInventoryItem
-  shopSellArea: {fileID: 356636173}
+  slotIndex: 0
+  canvasGroup: {fileID: 0}
 --- !u!1 &1022629242
 GameObject:
   m_ObjectHideFlags: 0
@@ -3854,7 +3893,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c5b6741af5f62c4cbffb18ada056318, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
-  csvFile: {fileID: 4900000, guid: aece1a82483e9cc468dabd3f559faccf, type: 3}
+  enemiesCSV: {fileID: 0}
+  smallPrefab: {fileID: 0}
+  mediumShotgunPrefab: {fileID: 0}
+  mediumBomberPrefab: {fileID: 0}
+  largePrefab: {fileID: 0}
+  bossPrefab: {fileID: 0}
 --- !u!4 &1465044971
 Transform:
   m_ObjectHideFlags: 0
@@ -4390,9 +4434,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0abb83e1c37564aae98a8f448b0742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelManager
-  levelLoader: {fileID: 1886668269}
-  enemySpawner: {fileID: 2015148726}
-  startLevel: 1
+  isLevelActive: 0
+  activeEnemies: []
+  timerText: {fileID: 0}
+  levelText: {fileID: 0}
+  customersText: {fileID: 0}
+  meatinventorytext: {fileID: 0}
+  Youdied: {fileID: 0}
+  RanOutOfTimeCanvas: {fileID: 0}
+  MoveOnNextLevelCanvas: {fileID: 0}
+  YouWonCanvas: {fileID: 0}
 --- !u!4 &1613559801
 Transform:
   m_ObjectHideFlags: 0
@@ -5220,7 +5271,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fec4b3061220e264993117cc1790ca18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelLoader
-  csvFile: {fileID: 4900000, guid: 0d447d4327e86ab489a4ec890e2de77b, type: 3}
+  levelsCSV: {fileID: 0}
 --- !u!4 &1886668270
 Transform:
   m_ObjectHideFlags: 0
@@ -5755,27 +5806,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab8ebeb30acb6342b539f6671aeed27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  levels:
-  - levelName: 'Level 1 '
-    timeLimit: 20
-    isUnlimitedTime: 0
-    quota: 5
-    spawnInterval: 2
-    humanPrefab: {fileID: 0}
-    spawnPoints: []
-  - levelName: 'Level 2 '
-    timeLimit: 20
-    isUnlimitedTime: 0
-    quota: 5
-    spawnInterval: 2
-    humanPrefab: {fileID: 0}
-    spawnPoints: []
-  defaultSpawnPoints:
-  - {fileID: 1873804514}
-  - {fileID: 1888153967}
-  - {fileID: 1455369173}
-  maxActiveHumans: 10
-  enemyPrefab: {fileID: 1011559931}
+  spawnPoints: []
 --- !u!4 &2015148727
 Transform:
   m_ObjectHideFlags: 0
@@ -5866,57 +5897,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2015427992}
   m_CullTransparentMesh: 1
---- !u!1 &2029650800
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2029650801}
-  - component: {fileID: 2029650802}
-  m_Layer: 0
-  m_Name: Inventory
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2029650801
+--- !u!4 &2029650801 stripped
 Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+  m_PrefabInstance: {fileID: 5875277525767307302}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029650800}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2884399, y: 0.64503, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1226242533}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2029650802
+--- !u!114 &2029650802 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 4962626143788804721, guid: bb33330ccde35834285624d033a49b99, type: 3}
+  m_PrefabInstance: {fileID: 5875277525767307302}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2029650800}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3dacc27bfc3898e4688382976f0c702a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
-  maxSlots: 5
-  slotTypes: 
-  weapons: 
-  slotUsed: 
-  weaponSystem: {fileID: 1413262454}
-  inventoryUI: {fileID: 1755275980}
-  meatCount: 0
 --- !u!1 &2113413205
 GameObject:
   m_ObjectHideFlags: 0
@@ -6285,6 +6281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyDropWeapon
   maxHealth: 100
+  currentHealth: 0
   healthSlider: {fileID: 1539054031}
   weaponDropPrefab: {fileID: 3193358891787835273, guid: 423ff89f1780c324692f11ff1c364f0b, type: 3}
   coinDropPrefab: {fileID: 3494748787314022983, guid: 0fce23a06d32d06429effd29165fd942, type: 3}
@@ -6341,6 +6338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyDropWeapon
   maxHealth: 50
+  currentHealth: 0
   healthSlider: {fileID: 603270378}
   weaponDropPrefab: {fileID: 2464943469326187127, guid: e6d5387f459359a4ca847ff685ba0365, type: 3}
   coinDropPrefab: {fileID: 3494748787314022983, guid: 0fce23a06d32d06429effd29165fd942, type: 3}
@@ -6581,6 +6579,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyDropWeapon
   maxHealth: 80
+  currentHealth: 0
   healthSlider: {fileID: 1306081301}
   weaponDropPrefab: {fileID: 7545877893220897951, guid: 07099d0dba1be764dbcc69a6663fd3f3, type: 3}
   coinDropPrefab: {fileID: 3494748787314022983, guid: 0fce23a06d32d06429effd29165fd942, type: 3}
@@ -6797,6 +6796,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDummyDropWeapon
   maxHealth: 100
+  currentHealth: 0
   healthSlider: {fileID: 2743165306582935486}
   weaponDropPrefab: {fileID: 7545877893220897951, guid: 07099d0dba1be764dbcc69a6663fd3f3, type: 3}
   coinDropPrefab: {fileID: 3494748787314022983, guid: 0fce23a06d32d06429effd29165fd942, type: 3}
@@ -6925,6 +6925,71 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1001 &5875277525767307302
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1226242533}
+    m_Modifications:
+    - target: {fileID: 95464915333412459, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_Name
+      value: Inventory
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.2884399
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.64503
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3893943965590963440, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4962626143788804721, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: inventoryUI
+      value: 
+      objectReference: {fileID: 1755275980}
+    - target: {fileID: 4962626143788804721, guid: bb33330ccde35834285624d033a49b99, type: 3}
+      propertyPath: weaponSystem
+      value: 
+      objectReference: {fileID: 1413262454}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bb33330ccde35834285624d033a49b99, type: 3}
 --- !u!50 &6696957980408106895
 Rigidbody2D:
   serializedVersion: 5

@@ -599,7 +599,7 @@ MonoBehaviour:
   attackCooldown: 1.5
   isShotgunEnemy: 1
   shotgunBulletPrefab: {fileID: 3647375248409908232, guid: dcf68a88ac78c7240a5d8ea0d4d68a37, type: 3}
-  shotgunBulletSpeed: 4
+  shotgunBulletSpeed: 10
   shotgunBulletSpawnOffset: 3
   shotgunDamage: 1
   shotgunRangeVFX: {fileID: 4674766873407249099, guid: dcf68a88ac78c7240a5d8ea0d4d68a37, type: 3}
