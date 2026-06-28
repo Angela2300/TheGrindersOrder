@@ -24,12 +24,12 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        // --- Singleton enforcement ---
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-
         Instance = this;
 
         if (persistAcrossScenes)
@@ -38,6 +38,9 @@ public class AudioManager : MonoBehaviour
         }
 
         SetupAudioSources();
+
+        if (clips.musicTracks != null && clips.musicTracks.Length > 0)
+            PlayMusic(clips.musicTracks[0]);
     }
 
     private void SetupAudioSources()
