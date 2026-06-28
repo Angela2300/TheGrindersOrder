@@ -10,9 +10,7 @@ public class ShopDetailPageUI : MonoBehaviour
     public ShopSystem shopSystem;
 
     [Header("Page References")]
-    [Tooltip("Drag Page_CategoryList here")]
     public GameObject categoryListPage;
-    [Tooltip("Drag this same GameObject (Page_UpgradeDetail) here")]
     public GameObject detailPage;
 
     [Header("Buttons")]
@@ -28,7 +26,6 @@ public class ShopDetailPageUI : MonoBehaviour
     public TextMeshProUGUI feedbackText;
 
     [Header("Feedback Timing")]
-    [Tooltip("How long the feedback message stays visible after a failed purchase")]
     public float feedbackDuration = 1.5f;
 
     string selectedCategory = "";
@@ -38,13 +35,11 @@ public class ShopDetailPageUI : MonoBehaviour
     {
         if (backButton != null)
             backButton.onClick.AddListener(BackToCategoryList);
-        else
-            Debug.LogWarning("[ShopDetailPageUI] backButton is not assigned.");
+   
 
         if (buyButton != null)
             buyButton.onClick.AddListener(TryBuySelectedUpgrade);
-        else
-            Debug.LogWarning("[ShopDetailPageUI] buyButton is not assigned.");
+
 
         if (feedbackText != null)
             feedbackText.text = "";
@@ -84,7 +79,6 @@ public class ShopDetailPageUI : MonoBehaviour
     {
         if (shopSystem == null)
         {
-            Debug.LogWarning("[ShopDetailPageUI] shopSystem is not assigned.");
             return;
         }
 
@@ -93,7 +87,6 @@ public class ShopDetailPageUI : MonoBehaviour
         UpgradeOption option = shopSystem.GetOption(selectedCategory);
         if (option == null)
         {
-            Debug.LogWarning($"[ShopDetailPageUI] No UpgradeOption found for category '{selectedCategory}'.");
             return;
         }
 

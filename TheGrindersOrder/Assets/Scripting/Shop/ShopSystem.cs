@@ -8,14 +8,12 @@ public class ShopSystem : MonoBehaviour
     public static event Action<string> OnPurchaseFailed;
 
     [Header("Data Source")]
-    [Tooltip("OFF = Inspector data. ON = tries CSVLoader later.")]
     public bool useCSV = false;
 
     [Header("Upgrade Options")]
     public List<UpgradeOption> upgradeOptions = new List<UpgradeOption>();
 
     [Header("PlayerInventory API Mode")]
-    [Tooltip("OFF = RemoveItem(\"loot_coin\", amount) and GetItemCount(\"loot_coin\"). ON = SpendCoins(amount) and GetCoins().")]
     public bool useCoinSpecificAPI = false;
 
     private Dictionary<string, int> currentLevels = new Dictionary<string, int>();
@@ -31,7 +29,6 @@ public class ShopSystem : MonoBehaviour
     {
         if (!useCSV) return;
 
-        Debug.LogWarning("[ShopSystem] useCSV = true but CSV integration not wired. Using Inspector data.");
     }
 
     private void InitialiseLevels()
@@ -77,7 +74,6 @@ public class ShopSystem : MonoBehaviour
         if (currentInventory == null)
         {
             OnPurchaseFailed?.Invoke("No player inventory found.");
-            Debug.LogWarning("[ShopSystem] TryPurchase called but no PlayerInventory is set.");
             return;
         }
 
@@ -85,7 +81,6 @@ public class ShopSystem : MonoBehaviour
 
         if (option == null)
         {
-            Debug.LogError($"[ShopSystem] No UpgradeOption found for category: '{category}'");
             return;
         }
 

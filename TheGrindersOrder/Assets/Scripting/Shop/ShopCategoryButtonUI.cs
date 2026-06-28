@@ -13,7 +13,6 @@ public class ShopCategoryButtonUI : MonoBehaviour
     public TextMeshProUGUI levelPreviewText;
 
     [Header("Detail Page Reference")]
-    [Tooltip("Drag the Page_UpgradeDetail GameObject — same reference for all category buttons")]
     public ShopDetailPageUI shopDetailPage;
 
     Button button;
@@ -23,8 +22,6 @@ public class ShopCategoryButtonUI : MonoBehaviour
         button = GetComponent<Button>();
         if (button != null)
             button.onClick.AddListener(OnClick);
-        else
-            Debug.LogWarning($"[ShopCategoryButtonUI] No Button component found on {gameObject.name}.");
 
         RefreshPreview();
     }
@@ -42,7 +39,6 @@ public class ShopCategoryButtonUI : MonoBehaviour
         UpgradeOption option = shopDetailPage.shopSystem.GetOption(upgradeCategory);
         if (option == null)
         {
-            Debug.LogWarning($"[ShopCategoryButtonUI] No UpgradeOption found for category '{upgradeCategory}'.");
             return;
         }
 
@@ -58,7 +54,6 @@ public class ShopCategoryButtonUI : MonoBehaviour
     {
         if (shopDetailPage == null)
         {
-            Debug.LogError("[ShopCategoryButtonUI] shopDetailPage is not assigned. Drag Page_UpgradeDetail into the Inspector.");
             return;
         }
 

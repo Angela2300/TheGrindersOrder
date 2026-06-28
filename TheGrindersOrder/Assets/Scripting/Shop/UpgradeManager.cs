@@ -23,7 +23,6 @@ public class UpgradeManager : MonoBehaviour
     {
         if (playerStats == null)
         {
-            Debug.LogWarning("[UpgradeManager] No PlayerStats found.");
             return;
         }
 
@@ -46,7 +45,7 @@ public class UpgradeManager : MonoBehaviour
                 break;
 
             default:
-                Debug.LogWarning("[UpgradeManager] Unknown effect type: " + effectType);
+
                 break;
         }
 

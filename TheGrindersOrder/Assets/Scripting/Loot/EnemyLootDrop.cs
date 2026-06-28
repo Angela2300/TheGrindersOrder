@@ -10,26 +10,19 @@ using UnityEngine;
 public class EnemyLootDrop : MonoBehaviour
 {
     [Header("Enemy Identity")]
-    [Tooltip("Must match the enemyType string in LootDropDataProvider tables. " +
-             "Values: farmer, townsperson, bomber, knight, marlow_boss")]
+   
     public string enemyType = "farmer";
 
     [Header("Data Source")]
-    [Tooltip("Drag LootDropDataProvider from the scene into this field")]
     public LootDropDataProvider dataProvider;
 
     [Header("Loot Prefabs")]
-    [Tooltip("Drag Loot_Coin prefab here")]
     public GameObject coinPrefab;
-    [Tooltip("Drag Loot_Meat prefab here")]
     public GameObject meatPrefab;
-    [Tooltip("Drag Loot_Medkit prefab here")]
     public GameObject medkitPrefab;
-    [Tooltip("Drag Loot_BossItem prefab here")]
     public GameObject bossItemPrefab;
 
     [Header("Scatter")]
-    [Tooltip("How far apart dropped items scatter from the death position")]
     public float scatterRadius = 0.5f;
 
     //Called by enemy teammate's death function 
@@ -37,7 +30,6 @@ public class EnemyLootDrop : MonoBehaviour
     {
         if (dataProvider == null)
         {
-            Debug.LogError("[EnemyLootDrop] Data Provider is not assigned. Drag LootDropDataProvider into the Inspector.");
             return;
         }
 
@@ -53,7 +45,6 @@ public class EnemyLootDrop : MonoBehaviour
 
             if (prefab == null)
             {
-                Debug.LogWarning($"[EnemyLootDrop] No prefab assigned for resource type: {entry.resourceType}");
                 continue;
             }
 
