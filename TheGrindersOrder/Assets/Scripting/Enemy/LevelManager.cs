@@ -46,7 +46,6 @@ public class LevelManager : MonoBehaviour
         roundTimer = level.timeLimit;
 
         customersServed = 0;
-        //  Do not reset meatCollected here — it persists until sold
 
         EnemySpawner spawner = Object.FindFirstObjectByType<EnemySpawner>();
         if (spawner != null)
@@ -157,9 +156,13 @@ public class LevelManager : MonoBehaviour
     private void SpawnEnemies(LevelData level)
     {
         for (int i = 0; i < level.smallCount; i++) SpawnEnemy("enemy_small");
+        for (int i = 0; i < level.smallCountdrop; i++) SpawnEnemy("enemy_small_drop");
         for (int i = 0; i < level.mediumCount; i++) SpawnEnemy("enemy_medium_shotgun");
+        for (int i = 0; i < level.mediumCountdrop; i++) SpawnEnemy("enemy_medium_shotgun_drop");
         for (int i = 0; i < level.bomberCount; i++) SpawnEnemy("enemy_medium_bomber");
+        for (int i = 0; i < level.bomberCountdrop; i++) SpawnEnemy("enemy_medium_bomberdrop");
         for (int i = 0; i < level.largeCount; i++) SpawnEnemy("enemy_large");
+        for (int i = 0; i < level.largeCountdrop; i++) SpawnEnemy("enemy_large_drop");
         for (int i = 0; i < level.bossCount; i++) SpawnEnemy("boss_bartender");
     }
 

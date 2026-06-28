@@ -6,13 +6,17 @@ public class EnemyManager : MonoBehaviour
     public static Dictionary<string, EnemyData> enemyDatabase = new Dictionary<string, EnemyData>();
 
     [Header("CSV")]
-    public TextAsset enemiesCSV; // Drag Enemies.csv here
+    public TextAsset enemiesCSV; 
 
     [Header("Prefab References")]
     public GameObject smallPrefab;
+    public GameObject smallPrefabdrop;
     public GameObject mediumShotgunPrefab;
+    public GameObject mediumShotgunPrefabdrop;
     public GameObject mediumBomberPrefab;
+    public GameObject mediumBomberPrefabdrop;
     public GameObject largePrefab;
+    public GameObject largePrefabdrop;
     public GameObject bossPrefab;
 
 
@@ -28,8 +32,7 @@ public class EnemyManager : MonoBehaviour
     {
         enemyDatabase.Clear();
 
-        // Do not use Application.dataPath here.
-        // It works in Unity Editor but can fail in Build & Run.
+
         if (enemiesCSV == null)
         {
             Debug.LogError("Enemies CSV is not assigned in EnemyManager!");
@@ -118,14 +121,26 @@ public class EnemyManager : MonoBehaviour
             case "enemy_small":
                 return instance.smallPrefab;
 
+            case "enemy_small_drop":
+                return instance.smallPrefabdrop;
+
             case "enemy_medium_shotgun":
                 return instance.mediumShotgunPrefab;
+
+            case "enemy_medium_shotgun_drop":
+                return instance.mediumShotgunPrefabdrop;
 
             case "enemy_medium_bomber":
                 return instance.mediumBomberPrefab;
 
+            case "enemy_medium_bomber_drop":
+                return instance.mediumBomberPrefabdrop;
+
             case "enemy_large":
                 return instance.largePrefab;
+
+            case "enemy_large_drop":
+                return instance.largePrefabdrop;
 
             case "boss_bartender":
                 return instance.bossPrefab;
@@ -136,105 +151,3 @@ public class EnemyManager : MonoBehaviour
     }
 }
 
-//using System.Collections.Generic;
-//using UnityEngine;
-//using System.IO;
-
-//public class EnemyManager : MonoBehaviour
-//{
-//    public static Dictionary<string, EnemyData> enemyDatabase = new Dictionary<string, EnemyData>();
-
-//    // Prefab references
-//    public GameObject smallPrefab;
-//    public GameObject mediumShotgunPrefab;
-//    public GameObject mediumBomberPrefab;
-//    public GameObject largePrefab;
-//    public GameObject bossPrefab;
-
-//    private static EnemyManager instance;
-
-//    private void Awake()
-//    {
-//        instance = this;
-//        LoadEnemyDatabase();
-//    }
-
-//    private void LoadEnemyDatabase()
-//    {
-//        enemyDatabase.Clear();
-//        string path = Application.dataPath + "/Scripting/CSVs/Enemies.csv";
-
-//        if (!File.Exists(path))
-//        {
-//            Debug.LogError("Enemies.csv not found at " + path);
-//            return;
-//        }
-
-//        // Open with FileShare.ReadWrite to prevent Sharing Violation errors
-//        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-//        using (var reader = new StreamReader(stream))
-//        {
-//            string content = reader.ReadToEnd();
-//            string[] lines = content.Split(new[] { "\r\n", "\r", "\n" }, System.StringSplitOptions.RemoveEmptyEntries);
-
-//            // Start from 1 to skip the header row
-//            for (int i = 1; i < lines.Length; i++)
-//            {
-//                string[] values = lines[i].Split(',');
-//                if (values.Length < 17) continue;
-
-//                string id = values[0].Trim().ToLower();
-
-//                // Create and populate the object
-//                EnemyData data = new EnemyData();
-//                data.enemyID = id;
-//                data.displayName = values[1].Trim();
-//                data.role = values[2].Trim();
-//                data.attackType = values[3].Trim();
-//                data.damageHearts = float.Parse(values[4]);
-//                data.attackRange = float.Parse(values[5]);
-//                data.damageLives = int.Parse(values[6]);
-//                data.health = int.Parse(values[7]);
-//                data.moveSpeedTier = values[8].Trim();
-//                data.moveSpeedValue = float.Parse(values[9]);
-//                data.rangeTier = values[10].Trim();
-//                data.followsPlayer = values[11].Trim().ToLower() == "true";
-//                data.meatDropAmt = int.Parse(values[12]);
-//                data.coinDropAmt = int.Parse(values[13]);
-//                data.weaponId = values[14].Trim().ToLower();
-//                data.spawnCount = string.IsNullOrWhiteSpace(values[15]) ? 0 : int.Parse(values[15]);
-//                data.isBomber = values[16].Trim().ToLower() == "true";
-
-//                if (!enemyDatabase.ContainsKey(id))
-//                {
-//                    enemyDatabase.Add(id, data);
-//                    Debug.Log("Loaded enemy ID: [" + id + "]");
-//                }
-//            }
-//        }
-//    }
-
-//    public void RegisterEnemy(GameObject enemy)
-//    {
-//        var controller = enemy.GetComponent<EnemyController>();
-//        if (controller != null)
-//        {
-//            controller.manager = this;
-//        }
-//    }
-
-//    public static GameObject GetPrefabForEnemy(string enemyID)
-//    {
-//        if (instance == null) return null;
-
-//        switch (enemyID)
-//        {
-//            case "enemy_small": return instance.smallPrefab;
-//            case "enemy_medium_shotgun": return instance.mediumShotgunPrefab;
-//            case "enemy_medium_bomber": return instance.mediumBomberPrefab;
-//            case "enemy_large": return instance.largePrefab;
-//            case "boss_bartender": return instance.bossPrefab;
-//            default: return null;
-//        }
-//    }
-//}

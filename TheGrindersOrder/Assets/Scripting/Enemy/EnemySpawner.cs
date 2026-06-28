@@ -70,9 +70,21 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
+        for (int i = 0; i < level.smallCountdrop; i++)
+        {
+            SpawnEnemy("enemy_small_drop", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
+        }
+
         for (int i = 0; i < level.mediumCount; i++)
         {
             SpawnEnemy("enemy_medium_shotgun", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
+        }
+
+        for (int i = 0; i < level.mediumCountdrop; i++)
+        {
+            SpawnEnemy("enemy_medium_shotgun_drop", spawnIndex++ % spawnPoints.Length);
             yield return new WaitForSeconds(1f);
         }
 
@@ -82,9 +94,21 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
 
+        for (int i = 0; i < level.bomberCountdrop; i++)
+        {
+            SpawnEnemy("enemy_medium_bomber_drop", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
+        }
+
         for (int i = 0; i < level.largeCount; i++)
         {
             SpawnEnemy("enemy_large", spawnIndex++ % spawnPoints.Length);
+            yield return new WaitForSeconds(1f);
+        }
+
+        for (int i = 0; i < level.largeCountdrop; i++)
+        {
+            SpawnEnemy("enemy_large_drop", spawnIndex++ % spawnPoints.Length);
             yield return new WaitForSeconds(1f);
         }
 
