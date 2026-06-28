@@ -8,14 +8,12 @@ public class ShopSystem : MonoBehaviour
     public static event Action<string> OnPurchaseFailed;
 
     [Header("Data Source")]
-    [Tooltip("OFF = Inspector data. ON = tries CSVLoader later.")]
     public bool useCSV = false;
 
     [Header("Upgrade Options")]
     public List<UpgradeOption> upgradeOptions = new List<UpgradeOption>();
 
     [Header("PlayerInventory API Mode")]
-    [Tooltip("OFF = RemoveItem(\"loot_coin\", amount) and GetItemCount(\"loot_coin\"). ON = SpendCoins(amount) and GetCoins().")]
     public bool useCoinSpecificAPI = false;
 
     private Dictionary<string, int> currentLevels = new Dictionary<string, int>();
@@ -29,9 +27,8 @@ public class ShopSystem : MonoBehaviour
 
     private void LoadUpgradeOptions()
     {
-        if (!useCSV) return;
-
-        Debug.LogWarning("[ShopSystem] useCSV = true but CSV integration not wired. Using Inspector data.");
+        if (!useCSV)
+            return;
     }
 
     private void InitialiseLevels()
@@ -40,7 +37,8 @@ public class ShopSystem : MonoBehaviour
 
         foreach (UpgradeOption option in upgradeOptions)
         {
-            if (option == null || string.IsNullOrEmpty(option.category)) continue;
+            if (option == null || string.IsNullOrEmpty(option.category))
+                continue;
 
             currentLevels[option.category] = 0;
         }
@@ -77,17 +75,13 @@ public class ShopSystem : MonoBehaviour
         if (currentInventory == null)
         {
             OnPurchaseFailed?.Invoke("No player inventory found.");
-            Debug.LogWarning("[ShopSystem] TryPurchase called but no PlayerInventory is set.");
             return;
         }
 
         UpgradeOption option = GetOption(category);
 
         if (option == null)
-        {
-            Debug.LogError($"[ShopSystem] No UpgradeOption found for category: '{category}'");
             return;
-        }
 
         int currentLevel = GetCurrentLevel(category);
 
@@ -130,7 +124,8 @@ public class ShopSystem : MonoBehaviour
 
     private int GetCoinCount()
     {
-        if (currentInventory == null) return 0;
+        if (currentInventory == null)
+            return 0;
 
         if (useCoinSpecificAPI)
             return currentInventory.GetCoins();
@@ -140,7 +135,8 @@ public class ShopSystem : MonoBehaviour
 
     private bool SpendCoins(int amount)
     {
-        if (currentInventory == null) return false;
+        if (currentInventory == null)
+            return false;
 
         if (useCoinSpecificAPI)
             return currentInventory.SpendCoins(amount);
