@@ -317,8 +317,11 @@ public class EnemyController : MonoBehaviour
         if (levelManager != null)
         {
             levelManager.RegisterCustomerServed(gameObject);
+
+            levelManager.RegisterBossKilled(enemyID);
         }
 
         Destroy(gameObject);
     }
+
 }

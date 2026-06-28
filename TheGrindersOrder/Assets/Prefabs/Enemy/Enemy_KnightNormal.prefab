@@ -435,7 +435,7 @@ MonoBehaviour:
   attackCooldown: 1.5
   isShotgunEnemy: 0
   shotgunBulletPrefab: {fileID: 0}
-  shotgunBulletSpeed: 10
+  shotgunBulletSpeed: 1
   shotgunBulletSpawnOffset: 0.7
   shotgunDamage: 2
   shotgunRangeVFX: {fileID: 0}

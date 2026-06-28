@@ -6,7 +6,8 @@ public class GameStarter : MonoBehaviour
     private LevelManager lm;
     private int currentLevelIndex = 0;
 
-    [SerializeField] private string targetSceneName;
+    [SerializeField] private string MainMenu;
+    [SerializeField] private string MainGame;
 
     void Start()
     {
@@ -23,16 +24,29 @@ public class GameStarter : MonoBehaviour
     }
 
 
-    public void ResetChosenScene()
+    public void ResetMainGameScene()
     {
 
-        if (string.IsNullOrEmpty(targetSceneName))
+        if (string.IsNullOrEmpty(MainGame))
         {
             Debug.LogError("Target scene name is empty! Please assign it in the Inspector.");
             return;
         }
 
-        SceneManager.LoadScene(targetSceneName);
+        SceneManager.LoadScene(MainGame);
+        Time.timeScale = 1f;
+    }
+
+    public void BacktoMainMenuScene()
+    {
+
+        if (string.IsNullOrEmpty(MainMenu))
+        {
+            Debug.LogError("Target scene name is empty! Please assign it in the Inspector.");
+            return;
+        }
+
+        SceneManager.LoadScene(MainMenu);
         Time.timeScale = 1f;
     }
 

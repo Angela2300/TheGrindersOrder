@@ -220,7 +220,17 @@ public class LevelManager : MonoBehaviour
             StartLevel(LevelLoader.levels[currentIndex + 1]);
             Time.timeScale = 1f;
         }
-        else
+    }
+
+    // ---------------------------
+    // FINAL BOSS VICTORY
+    // ---------------------------
+    public void RegisterBossKilled(string enemyID)
+    {
+        int currentIndex = LevelLoader.levels.IndexOf(currentLevel);
+
+        // Only trigger victory if this is the last level AND the boss enemy is killed
+        if (currentIndex == LevelLoader.levels.Count - 1 && enemyID == "boss_bartender")
         {
             YouWon();
         }
@@ -240,7 +250,7 @@ public class LevelManager : MonoBehaviour
             levelText.text = $"Level: {currentLevel.levelID}";
 
         if (customersText != null && currentLevel != null)
-            customersText.text = $"Customers Served: {customersServed}/{currentLevel.customersToServe}";
+            customersText.text = $"Meat Sold: {customersServed}/{currentLevel.customersToServe}";
 
         if (meatinventorytext != null)
             meatinventorytext.text = $"Meat Collected: {meatCollected}";
