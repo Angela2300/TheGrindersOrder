@@ -34,10 +34,22 @@ Ranged Humans (Shotgun): Keep distance, fire projectiles.
 Tank Bombers: Charge towards the player and trigger a proximity explosion that deals radius damage. (Tip: Stay out of close range.)
 Final Boss: Large range plus explosions.
 
+
+
 ### Economy (Bar and Shop)
 
 Sell: Exchange raw meat for coins at the bar.
 Buy/upgrade: Buy items at the shop to enhance player stats (speed, armor, fire rate, etc.)
+
+
+
+### Extra Notes
+
+Players cannot pass through boxes, but their bullets can. 
+
+Bullets cannot pass through meat pickups, encouraging players to collect them.
+
+
 
 ## Contributions
 
@@ -69,7 +81,9 @@ Health display (5 Hearts)
 Inventory system (3 Weapon slots)
 Integrated UI with gameplay variables from the programming
 Configure Loot drop: meat \& weapons pickup.
-Contributed to the weapon and enemy damage system,  enemy UI health bar by debugging, integrating, and refining damage-related scripts with a teammate.
+Contributed to the weapon and enemy damage system,  enemy UI health bar by debugging, integrating, and refining damage-related scripts to assist teammate.
+
+Integrated team members' scenes and scripts into a single game.
 Added VFX for enemies \& weapons
 
 ### Team Member 3 - Koh Qin Xi (2500031)
