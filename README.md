@@ -45,7 +45,7 @@ Buy/upgrade: Buy items at the shop to enhance player stats (speed, armor, fire r
 
 ### Extra Notes
 
-Players cannot pass through boxes, but their bullets can. 
+Players cannot pass through boxes, but their bullets can.
 
 Bullets cannot pass through meat pickups, encouraging players to collect them.
 
@@ -141,6 +141,14 @@ Weapons: https://chatgpt.com/s/m\_6a4108526ea4819185a2f9847660d4d3
 Player Bullet: https://chatgpt.com/s/m\_6a4108de728481919a5b9045d591836f
 Enemy Bullet: https://chatgpt.com/s/m\_6a4108e9bfc48191910b1288a98fdfdb
 Shop Icons (Generated with ChatGPT)
+
+
+
+### VFX
+
+Explosion: https://assetstore.unity.com/packages/vfx/particles/fire-explosions/free-2d-impact-fx-201222
+
+
 
 ### UI
 
