@@ -14022,7 +14022,7 @@ MonoBehaviour:
   mediumBomberPrefab: {fileID: 4012398331869383998, guid: 4c5c42b8092762e45b64515a8b68758e, type: 3}
   mediumBomberPrefabdrop: {fileID: 6301722452126551409, guid: 98b86875638583e4dbe0da9a15f6134d, type: 3}
   largePrefab: {fileID: 3675164031630925291, guid: 419e4359edf3da846ac5e28667b7d962, type: 3}
-  largePrefabdrop: {fileID: 3726477431155707728, guid: b6b38f17b51dd724091ccf1df7de099c, type: 3}
+  largePrefabdrop: {fileID: 3675164031630925291, guid: 419e4359edf3da846ac5e28667b7d962, type: 3}
   bossPrefab: {fileID: 7463149923302653149, guid: 3d6d9f3502d219d48ab644b40bea4924, type: 3}
 --- !u!1 &1467981130
 GameObject:

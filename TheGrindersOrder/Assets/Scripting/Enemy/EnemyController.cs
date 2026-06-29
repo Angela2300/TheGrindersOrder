@@ -129,6 +129,11 @@ public class EnemyController : MonoBehaviour
             return;
         }
 
+        if (isKnightEnemy)
+        {
+            finalAttackRange = 1.2f;
+        }
+
         if (distance > finalAttackRange)
         {
             transform.position = Vector3.MoveTowards(
@@ -280,20 +285,24 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+ 
+
     private void SetupAllRangeVFX()
     {
-        SetupRangeVFX(shotgunRangeVFX);
-        SetupRangeVFX(knightRangeVFX);
-        SetupRangeVFX(bossRangeVFX);
+        SetupRangeVFX(shotgunRangeVFX, 6f);
+        SetupRangeVFX(knightRangeVFX, 1.2f);
+        SetupRangeVFX(bossRangeVFX, 8f);
     }
 
-    private void SetupRangeVFX(GameObject rangeVFX)
+
+
+    private void SetupRangeVFX(GameObject rangeVFX, float range)
     {
-        if (rangeVFX == null || stats == null) return;
+        if (rangeVFX == null) return;
 
         rangeVFX.SetActive(true);
 
-        float size = stats.attackRange * 2f;
+        float size = range * 2f;
         rangeVFX.transform.localScale = new Vector3(size, size, 1f);
     }
 

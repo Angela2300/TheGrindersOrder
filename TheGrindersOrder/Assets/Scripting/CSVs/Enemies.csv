@@ -1,11 +1,11 @@
 enemyID,displayName,role,attackType,damageHearts,attackRange,damageLives,health,moveSpeedTier,moveSpeedValue,rangeTier,followsPlayer,meatDropAmt,coinDropAmt,weaponId,,spawnCount,,isBomber
-enemy_small,Farmer,Small Melee,Melee,0.5,2,1,50,Slow,0.5,Short,TRUE,1,0,,,,,FALSE
-enemy_small_drop,Farmer,Small Melee,Melee,0.5,2,1,50,Slow,0.5,Short,TRUE,1,0,,,,,FALSE
-enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Shotgun,1,4,2,50,Medium,1,Close,TRUE,2,0,weapon_smg,,,,FALSE
-enemy_medium_shotgun_drop,Shotgun Townsperson,Medium V1,Shotgun,1,4,2,50,Medium,1,Close,TRUE,2,0,weapon_smg,,,,FALSE
-enemy_medium_bomber,Bomber Townsperson,Medium V2,Bomber,1,3,2,80,Medium,1,Explosion,TRUE,3,0,weapon_shotgun,,,,TRUE
-enemy_medium_bomber_drop,Bomber Townsperson,Medium V2,Bomber,1,3,2,80,Medium,1,Explosion,TRUE,3,0,weapon_shotgun,,,,TRUE
-enemy_large,Knight,Large Shooter,Launcher,1.5,5,3,120,Slow,0.5,Large,TRUE,4,0,weapon_launcher,,,,FALSE
-enemy_large_drop,Knight,Large Shooter,Launcher,1.5,5,3,120,Slow,0.5,Large,TRUE,4,0,weapon_launcher,,,,FALSE
+enemy_small,Farmer,Small Melee,Melee,0.5,2,1,50,Slow,0.5,Short,TRUE,1,0,weapon_smg,,,,FALSE
+enemy_small_drop,Farmer,Small Melee,Melee,0.5,2,1,50,Slow,0.5,Short,TRUE,1,0,weapon_smg,,,,FALSE
+enemy_medium_shotgun,Shotgun Townsperson,Medium V1,Shotgun,1,4,2,50,Medium,1,Close,TRUE,2,0,weapon_shotgun,,,,FALSE
+enemy_medium_shotgun_drop,Shotgun Townsperson,Medium V1,Shotgun,1,4,2,50,Medium,1,Close,TRUE,2,0,weapon_shotgun,,,,FALSE
+enemy_medium_bomber,Bomber Townsperson,Medium V2,Bomber,1,3,2,80,Medium,1,Explosion,TRUE,3,0,weapon_launcher,,,,TRUE
+enemy_medium_bomber_drop,Bomber Townsperson,Medium V2,Bomber,1,3,2,80,Medium,1,Explosion,TRUE,3,0,weapon_launcher,,,,TRUE
+enemy_large,Knight,Large Melee,Melee,1.5,2,4,120,Slow,0.5,Short,TRUE,4,0,,,,,FALSE
+enemy_large_drop,Knight,Large Melee,Melee,1.5,2,4,120,Slow,0.5,Short,TRUE,4,0,,,,,FALSE
 boss_bartender,Marlow the Mixer,Boss,Boss,2,8,4,500,Boss,1,Largest,TRUE,0,0,quest_boss_item,,,,FALSE
 boss_bartender_drop,Marlow the Mixer,Boss,Boss,2,8,4,500,Boss,1,Largest,TRUE,0,0,quest_boss_item,,,,FALSE
